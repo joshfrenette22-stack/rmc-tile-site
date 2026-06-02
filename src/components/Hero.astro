@@ -28,12 +28,25 @@
 
 <script>
   const video = document.getElementById('heroVideo') as HTMLVideoElement;
-  const wrap = document.getElementById('heroVideoWrap')!;
+  const duration = 5.04; // video length in seconds
+  const rangeStart = 3.8;  // scrub back to here
+  const rangeEnd = duration; // scrub forward to here
+  const cycleDuration = 4000; // ms for one back-and-forth cycle
 
   video.addEventListener('ended', () => {
-    // Pause on last frame, then start floating
     video.pause();
-    wrap.classList.add('floating');
+    // Oscillate the playhead back and forth near the end
+    // so individual tiles appear to shift in place
+    const start = performance.now();
+    function tick(now: number) {
+      const elapsed = (now - start) % cycleDuration;
+      const t = elapsed / cycleDuration;
+      // Sine wave: 0→1→0 over one cycle
+      const ease = (Math.sin(t * Math.PI * 2 - Math.PI / 2) + 1) / 2;
+      video.currentTime = rangeStart + ease * (rangeEnd - rangeStart);
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
   });
 </script>
 
@@ -96,18 +109,6 @@
     display: block;
     width: 100%;
     height: auto;
-  }
-
-  /* Floating animation after video ends */
-  @keyframes hero-float {
-    0%   { transform: translateY(0) rotate(0deg); }
-    25%  { transform: translateY(-10px) rotate(0.4deg); }
-    50%  { transform: translateY(-4px) rotate(-0.3deg); }
-    75%  { transform: translateY(-12px) rotate(0.2deg); }
-    100% { transform: translateY(0) rotate(0deg); }
-  }
-  .video-wrap:global(.floating) {
-    animation: hero-float 6s ease-in-out infinite;
   }
 
   /* Gradient overlays to blend video into hero background */
