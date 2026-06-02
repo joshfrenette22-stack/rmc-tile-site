@@ -1,0 +1,190 @@
+---
+import { Image } from 'astro:assets';
+import warmFireplace from '../assets/photos/warm-fireplace.jpg';
+import warmStone from '../assets/photos/warm-stone.jpg';
+import warmTub from '../assets/photos/warm-tub.jpg';
+import coolChevron from '../assets/photos/cool-chevron.jpg';
+import warmGreenBath from '../assets/photos/warm-green-bath.jpg';
+
+const slides = [
+  { src: warmFireplace, alt: 'Floor-to-ceiling tile fireplace by RMC Tile' },
+  { src: warmStone, alt: 'Stone feature wall' },
+  { src: warmTub, alt: 'Tub surround' },
+  { src: coolChevron, alt: 'Chevron marble shower' },
+  { src: warmGreenBath, alt: 'Walk-in shower' },
+];
+---
+
+<section class="about" id="about-intro">
+  <div class="about-in">
+    <div class="about-copy">
+      <div class="eyebrow" style="color:var(--color-orange);margin-bottom:22px;">About RMC Tile</div>
+      <h2>Two Generations of Setting Tile the Right Way</h2>
+      <div class="body">
+        <p><b>Roy Chynoweth</b> is a second-generation tile setter with more than twenty years on the trowel. He started RMC Tile in 2019 to do one thing well&mdash;careful, precise tile work for the people of Northern Colorado.</p>
+        <p>Every job runs through Roy himself, from the first walkthrough to the last wiped grout line. No crews handed your home off to, no corners cut where they don't show. Just tile that's square, sealed, and built to outlast the trends.</p>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="n">20+</div><div class="l">Years on the trowel</div></div>
+        <div class="stat"><div class="n">2nd</div><div class="l">Generation setter</div></div>
+        <div class="stat"><div class="n">2019</div><div class="l">Serving Northern CO</div></div>
+      </div>
+    </div>
+    <div class="about-media">
+      <div class="frame-img" id="aboutSlider">
+        {slides.map((s, i) => (
+          <Image src={s.src} alt={s.alt} width={640} class:list={['grade', { active: i === 0 }]} loading="lazy" />
+        ))}
+        <div class="dots" aria-hidden="true"></div>
+      </div>
+      <div class="tagchip"><div class="l">Based in</div><div class="v">Loveland, CO</div></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const box = document.getElementById('aboutSlider');
+  if (box) {
+    const imgs = box.querySelectorAll('img');
+    const dots = box.querySelector('.dots')!;
+    let i = 0;
+    let t: ReturnType<typeof setInterval>;
+
+    imgs.forEach((_, n) => {
+      const b = document.createElement('button');
+      if (n === 0) b.className = 'on';
+      b.addEventListener('click', () => { go(n); reset(); });
+      dots.appendChild(b);
+    });
+
+    const btns = dots.querySelectorAll('button');
+
+    function go(n: number) {
+      imgs[i].classList.remove('active');
+      btns[i].classList.remove('on');
+      i = n;
+      imgs[i].classList.add('active');
+      btns[i].classList.add('on');
+    }
+
+    function next() { go((i + 1) % imgs.length); }
+
+    function reset() {
+      clearInterval(t);
+      t = setInterval(next, 3800);
+    }
+
+    reset();
+  }
+</script>
+
+<style>
+  .about { background: var(--color-canvas); padding: clamp(72px, 9vw, 128px) 0; }
+  .about-in {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: clamp(40px, 6vw, 88px);
+    align-items: center;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+    font-size: clamp(30px, 3.8vw, 52px);
+    color: var(--color-ink);
+  }
+  .body { margin-top: 24px; display: flex; flex-direction: column; gap: 18px; }
+  .body p {
+    font-size: clamp(16px, 1.4vw, 18px);
+    color: var(--color-body);
+    line-height: 1.6;
+    max-width: 52ch;
+  }
+  .body p :global(b) { color: var(--color-ink); font-weight: 600; }
+  .stats { margin-top: 36px; display: flex; gap: 40px; flex-wrap: wrap; }
+  .stat .n {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(34px, 4vw, 48px);
+    letter-spacing: -0.02em;
+    color: var(--color-orange);
+    line-height: 1;
+  }
+  .stat .l {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-grey);
+    margin-top: 8px;
+  }
+  .about-media { position: relative; }
+  .frame-img {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 4/5;
+  }
+  .frame-img :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.1s ease;
+  }
+  .frame-img :global(img.active) { opacity: 1; }
+  .dots {
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+  }
+  .dots :global(button) {
+    width: 8px; height: 8px; padding: 0;
+    border: none; border-radius: 50%;
+    background: rgba(255,255,255,0.55);
+    cursor: pointer; transition: all 0.25s;
+  }
+  .dots :global(button.on) {
+    background: #fff;
+    width: 22px;
+    border-radius: 4px;
+  }
+  .tagchip {
+    position: absolute;
+    left: -18px;
+    bottom: 28px;
+    background: var(--color-ink);
+    color: var(--color-beige);
+    border-radius: 12px;
+    padding: 16px 20px;
+    box-shadow: 0 18px 40px -18px rgba(76,40,6,0.5);
+  }
+  .tagchip .l {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+  .tagchip .v {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 20px;
+    margin-top: 4px;
+  }
+  @media (max-width: 860px) {
+    .about-in { grid-template-columns: 1fr; gap: 40px; }
+    .frame-img { aspect-ratio: 4/3; }
+    .tagchip { left: 16px; }
+  }
+</style>

@@ -1,0 +1,348 @@
+---
+---
+
+<div class="contact-grid">
+  <!-- Form -->
+  <div class="form-card">
+    <form id="estimateForm" novalidate>
+      <div class="field-row">
+        <div class="field">
+          <label>Name <span class="req">*</span></label>
+          <input type="text" name="name" data-required>
+          <div class="err">Please enter your name.</div>
+        </div>
+        <div class="field">
+          <label>Phone <span class="req">*</span></label>
+          <input type="tel" name="phone" data-required>
+          <div class="err">Please enter a phone number.</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Email <span class="req">*</span></label>
+        <input type="email" name="email" data-required data-email>
+        <div class="err">Please enter a valid email.</div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Project type</label>
+          <select name="type">
+            <option value="">Select one</option>
+            <option>Kitchen - backsplash</option>
+            <option>Bathroom - full remodel</option>
+            <option>Shower / shower pan</option>
+            <option>Floors</option>
+            <option>Fireplace / custom</option>
+            <option>New build</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Timeline</label>
+          <select name="timeline">
+            <option value="">Select one</option>
+            <option>As soon as possible</option>
+            <option>Within 1–3 months</option>
+            <option>3–6 months</option>
+            <option>Just planning / ballpark</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Address / service area</label>
+        <input type="text" name="address" placeholder="City or address in Northern Colorado">
+      </div>
+      <div class="field">
+        <label>Project details <span class="req">*</span></label>
+        <textarea name="details" data-required placeholder="Rooms, rough square footage, tile you're considering, anything else."></textarea>
+        <div class="err">Tell us a little about the project.</div>
+      </div>
+      <button type="submit" class="btn-orange submit-btn">Request my free estimate</button>
+      <div class="form-note">No charge, no pressure. We'll never share your info.</div>
+    </form>
+    <div class="form-success" id="formSuccess">
+      <div class="ring">&#10003;</div>
+      <h3>Thanks&mdash;we've got it.</h3>
+      <p>Roy will reach out within 24–48 hours to set up a walkthrough. For anything urgent, call <b>(970)&nbsp;405-9301</b>.</p>
+    </div>
+  </div>
+
+  <!-- Info panel -->
+  <div class="info-panel">
+    <div class="info-card">
+      <div class="pat"></div>
+      <h3>Get in touch</h3>
+      <div class="info-line">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <div><div class="lab">Phone</div><div class="val"><a href="tel:+19704059301">(970) 405-9301</a></div></div>
+      </div>
+      <div class="info-line">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+        <div><div class="lab">Email</div><div class="val"><a href="mailto:roy@rmctile.co">roy@rmctile.co</a></div></div>
+      </div>
+      <div class="info-line">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <div><div class="lab">Based in</div><div class="val">Loveland, Colorado</div></div>
+      </div>
+      <div class="info-line">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        <div><div class="lab">Hours</div><div class="val">Mon–Fri · 7am–5pm</div></div>
+      </div>
+    </div>
+
+    <div class="info-soft">
+      <div class="lab">Service area</div>
+      <p>Serving homeowners, builders, and designers across Northern Colorado.</p>
+      <div class="area-tags">
+        <span>Loveland</span><span>Fort Collins</span><span>Windsor</span>
+        <span>Greeley</span><span>Berthoud</span><span>Timnath</span><span>Wellington</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('estimateForm') as HTMLFormElement;
+  const success = document.getElementById('formSuccess')!;
+
+  function setInvalid(field: Element, bad: boolean) {
+    field.classList.toggle('invalid', bad);
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    let ok = true;
+
+    form.querySelectorAll('[data-required]').forEach((el) => {
+      const input = el as HTMLInputElement | HTMLTextAreaElement;
+      const field = input.closest('.field')!;
+      const v = input.value.trim();
+      let bad = !v;
+      if (!bad && input.hasAttribute('data-email')) {
+        bad = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+      }
+      setInvalid(field, bad);
+      if (bad) ok = false;
+    });
+
+    if (!ok) {
+      const first = form.querySelector('.field.invalid input, .field.invalid textarea') as HTMLElement;
+      if (first) first.focus();
+      return;
+    }
+
+    // Submit to API
+    const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    try {
+      const data = new FormData(form);
+      const body = Object.fromEntries(data.entries());
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      if (!res.ok) throw new Error('Failed');
+
+      form.style.display = 'none';
+      success.classList.add('show');
+    } catch {
+      btn.disabled = false;
+      btn.textContent = 'Request my free estimate';
+      alert('Something went wrong. Please call (970) 405-9301 or try again.');
+    }
+  });
+
+  // Clear error on input
+  form.querySelectorAll('input, select, textarea').forEach((el) => {
+    el.addEventListener('input', () => {
+      const f = el.closest('.field');
+      if (f) f.classList.remove('invalid');
+    });
+  });
+</script>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: clamp(40px, 5vw, 72px);
+    align-items: start;
+  }
+  @media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+  .form-card {
+    background: #fff;
+    border: 1px solid var(--color-canvas-line);
+    border-radius: 18px;
+    padding: clamp(28px, 3vw, 44px);
+  }
+  .field { margin-bottom: 20px; }
+  .field label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    margin-bottom: 9px;
+  }
+  .field label .req { color: var(--color-orange); }
+  .field input, .field select, .field textarea {
+    width: 100%;
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--color-ink);
+    background: var(--color-canvas);
+    border: 1px solid var(--color-canvas-line);
+    border-radius: 9px;
+    padding: 13px 15px;
+    outline: none;
+    transition: border-color 0.18s, box-shadow 0.18s;
+  }
+  .field textarea { min-height: 120px; resize: vertical; }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    border-color: var(--color-orange);
+    box-shadow: 0 0 0 3px rgba(246,111,0,0.16);
+  }
+  .field:global(.invalid) input,
+  .field:global(.invalid) select,
+  .field:global(.invalid) textarea {
+    border-color: var(--color-error);
+    box-shadow: 0 0 0 3px rgba(211,67,36,0.14);
+  }
+  .err {
+    display: none;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--color-error);
+    margin-top: 7px;
+  }
+  .field:global(.invalid) .err { display: block; }
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  @media (max-width: 560px) { .field-row { grid-template-columns: 1fr; gap: 0; } }
+  .submit-btn {
+    width: 100%;
+    justify-content: center;
+    font-family: var(--font-body);
+    margin-top: 6px;
+  }
+  .form-note {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--color-muted);
+    text-align: center;
+    margin-top: 16px;
+  }
+  .form-success {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    padding: 40px 20px;
+  }
+  .form-success:global(.show) { display: flex; }
+  .ring {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: var(--color-orange);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+  }
+  .form-success h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--color-ink);
+  }
+  .form-success p {
+    font-size: 16px;
+    color: var(--color-body);
+    max-width: 38ch;
+    line-height: 1.55;
+  }
+
+  /* Info panel */
+  .info-panel { display: flex; flex-direction: column; gap: 14px; }
+  .info-card {
+    background: var(--color-ink);
+    color: var(--color-beige);
+    border-radius: 16px;
+    padding: 30px;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .pat {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image:
+      linear-gradient(rgba(255,247,233,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,247,233,0.06) 1px, transparent 1px);
+    background-size: 54px 54px;
+  }
+  .info-card h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 18px;
+  }
+  .info-line {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    padding: 11px 0;
+    border-top: 1px solid rgba(255,247,233,0.16);
+  }
+  .info-line:first-of-type { border-top: none; }
+  .ic { width: 20px; height: 20px; flex: none; color: var(--color-orange); margin-top: 2px; }
+  .info-line .lab {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,247,233,0.6);
+  }
+  .info-line .val { font-size: 16px; color: var(--color-beige); margin-top: 2px; }
+  .info-line .val a { color: var(--color-beige); }
+  .info-line .val a:hover { color: var(--color-orange); }
+
+  .info-soft {
+    background: #fff;
+    border: 1px solid var(--color-canvas-line);
+    border-radius: 16px;
+    padding: 26px 28px;
+  }
+  .info-soft .lab {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-orange);
+    margin-bottom: 12px;
+  }
+  .info-soft p { font-size: 15px; line-height: 1.6; color: var(--color-body); }
+  .area-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .area-tags span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--color-body);
+    border: 1px solid var(--color-canvas-line);
+    border-radius: 999px;
+    padding: 6px 12px;
+  }
+</style>

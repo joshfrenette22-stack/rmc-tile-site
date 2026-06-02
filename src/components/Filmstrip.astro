@@ -1,0 +1,126 @@
+---
+import { Image } from 'astro:assets';
+import warmStone from '../assets/photos/warm-stone.jpg';
+import coolKitchen from '../assets/photos/cool-kitchen.jpg';
+import warmPowder from '../assets/photos/warm-powder.jpg';
+import coolPlank from '../assets/photos/cool-plank.jpg';
+import coolFloor from '../assets/photos/cool-floor.jpg';
+import coolChevron from '../assets/photos/cool-chevron.jpg';
+import warmTub from '../assets/photos/warm-tub.jpg';
+import warmGreenBath from '../assets/photos/warm-green-bath.jpg';
+
+const row1 = [
+  { src: warmStone, alt: 'Stone feature wall', cap: 'Stone feature wall · Loveland' },
+  { src: coolKitchen, alt: 'Kitchen backsplash', cap: 'Kitchen backsplash · Fort Collins' },
+  { src: warmPowder, alt: 'Powder room tile', cap: 'Powder room' },
+  { src: coolPlank, alt: 'Plank tile floor', cap: 'Plank-tile floor' },
+];
+const row2 = [
+  { src: coolFloor, alt: 'Bath remodel', cap: 'Bath remodel · Windsor' },
+  { src: coolChevron, alt: 'Chevron shower', cap: 'Chevron shower' },
+  { src: warmTub, alt: 'Tub surround', cap: 'Tub surround' },
+  { src: warmGreenBath, alt: 'Walk-in shower', cap: 'Walk-in shower' },
+];
+---
+
+<section class="work" id="work">
+  <div class="work-in">
+    <div class="work-head">
+      <div>
+        <div class="eyebrow" style="color:var(--color-orange);margin-bottom:18px;">Our Work</div>
+        <h2>Recently Set in Northern Colorado</h2>
+      </div>
+      <p>A few of the kitchens and baths we've finished&mdash;hover to slow it down.</p>
+    </div>
+  </div>
+  <div class="film">
+    <div class="film-row">
+      {[...row1, ...row1].map((p, i) => (
+        <figure class="film-card">
+          <Image src={p.src} alt={i < row1.length ? p.alt : ''} width={400} loading="lazy" class="grade" />
+          <figcaption>{p.cap}</figcaption>
+        </figure>
+      ))}
+    </div>
+    <div class="film-row rev">
+      {[...row2, ...row2].map((p, i) => (
+        <figure class="film-card">
+          <Image src={p.src} alt={i < row2.length ? p.alt : ''} width={400} loading="lazy" class="grade" />
+          <figcaption>{p.cap}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .work { background: var(--color-canvas); padding: clamp(72px, 9vw, 120px) 0; overflow: hidden; }
+  .work-in { max-width: 1280px; margin: 0 auto 44px; padding: 0 48px; }
+  .work-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+    font-size: clamp(30px, 3.8vw, 52px);
+    color: var(--color-ink);
+    max-width: 18ch;
+  }
+  .work-head p {
+    font-size: 17px;
+    color: var(--color-body);
+    max-width: 36ch;
+    line-height: 1.55;
+  }
+  .film { display: flex; flex-direction: column; gap: 16px; }
+  .film:hover .film-row { animation-play-state: paused; }
+  .film-row {
+    display: flex;
+    gap: 16px;
+    width: max-content;
+    animation: film 56s linear infinite;
+    will-change: transform;
+  }
+  .film-row.rev { animation-duration: 64s; animation-direction: reverse; }
+  .film-card {
+    position: relative;
+    flex: none;
+    width: clamp(280px, 30vw, 400px);
+    aspect-ratio: 4/3;
+    border-radius: 16px;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .film-card :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+  }
+  .film-card:hover :global(img) { transform: scale(1.06); }
+  .film-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, transparent 46%, rgba(17,17,17,0.66));
+  }
+  figcaption {
+    position: absolute;
+    left: 18px;
+    bottom: 15px;
+    z-index: 2;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-beige);
+  }
+  @media (max-width: 860px) { .film-card { width: 74vw; } }
+</style>

@@ -1,0 +1,118 @@
+---
+import Base from '../layouts/Base.astro';
+import SubpageHero from '../components/SubpageHero.astro';
+import { Image } from 'astro:assets';
+import Values from '../components/Values.astro';
+import WhyRmc from '../components/WhyRmc.astro';
+import CtaBand from '../components/CtaBand.astro';
+import warmFireplace from '../assets/photos/warm-fireplace.jpg';
+
+// Use a real photo for the banner
+import warmStone from '../assets/photos/warm-stone.jpg';
+
+const aboutValues = [
+  { label: '01 · Craftsmanship', title: 'Built by hand', description: 'Twenty years on the trowel, second generation. Every cut, every joint, set by the same pair of hands that quoted the job.' },
+  { label: '02 · Precision', title: 'Square and dead level', description: 'Waterproofing done right, layout snapped to the room, grout lines you could lay a straightedge across. The prep is where tile lasts or fails.' },
+  { label: '03 · Trust', title: 'Straight answers', description: 'A real written estimate up front, a clean and protected jobsite, and a setter who stands behind the work years after the last tile goes down.' },
+];
+---
+
+<Base title="About" description="Roy Chynoweth is a second-generation tile setter with more than twenty years on the trowel. RMC Tile serves Loveland and Northern Colorado.">
+  <SubpageHero
+    bannerImage={warmStone}
+    bannerAlt="Bright modern bathroom"
+    breadcrumb="About"
+    eyebrow="About RMC Tile"
+    title="Two Generations, One Trade."
+    description="Roy Chynoweth has been setting tile for more than twenty years\u2014a craft he learned from his father and has run as his own shop since 2019."
+  />
+
+  <!-- Story -->
+  <section class="section-pad" style="background:var(--color-canvas);">
+    <div class="container">
+      <div class="split">
+        <div>
+          <div class="sec-eyebrow">The Story</div>
+          <h2 class="lede">Tile is the whole job here&mdash;not a side service.</h2>
+          <div class="bodycopy">
+            <p>RMC Tile is a <b>second-generation tile business</b>. Roy grew up around the trade, started setting professionally over two decades ago, and opened RMC Construction LLC in 2019 to do it on his own terms&mdash;one craftsman, one job at a time.</p>
+            <p>That means the person who quotes your project is the same person who waterproofs the shower, snaps the layout, and grouts the last joint. <b>No subs, no handoffs, no crew you've never met.</b></p>
+            <p>From kitchen and bath remodels to brand-new builds, RMC handles floors, showers, shower pans, backsplashes, and custom work for homeowners, builders, and designers across Loveland and Northern Colorado.</p>
+          </div>
+        </div>
+        <div class="img-wrap">
+          <Image src={warmFireplace} alt="Floor-to-ceiling tile fireplace by RMC" width={640} loading="lazy" />
+          <span class="tagpill">On site · Loveland, CO</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Values
+    eyebrow="What You Get"
+    heading="A setter who sweats the part you can't see"
+    values={aboutValues}
+  />
+
+  <WhyRmc />
+  <CtaBand />
+</Base>
+
+<style>
+  .sec-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-orange);
+    margin-bottom: 18px;
+  }
+  .lede {
+    font-size: clamp(20px, 2.4vw, 30px);
+    line-height: 1.4;
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    max-width: 24ch;
+    margin-bottom: 28px;
+  }
+  .bodycopy p {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--color-body);
+    margin-bottom: 18px;
+    max-width: 62ch;
+  }
+  .bodycopy p:last-child { margin-bottom: 0; }
+  .bodycopy :global(b) { color: var(--color-ink); font-weight: 600; }
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(40px, 6vw, 88px);
+    align-items: center;
+  }
+  .img-wrap {
+    border-radius: 18px;
+    overflow: hidden;
+    aspect-ratio: 4/5;
+    position: relative;
+  }
+  .img-wrap :global(img) { width: 100%; height: 100%; object-fit: cover; }
+  .tagpill {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    background: rgba(17,17,17,0.6);
+    color: var(--color-beige);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 999px;
+  }
+  @media (max-width: 860px) {
+    .split { grid-template-columns: 1fr; gap: 32px; }
+  }
+</style>

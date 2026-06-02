@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import SubpageHero from '../components/SubpageHero.astro';
+import Gallery from '../components/Gallery.astro';
+import CtaBand from '../components/CtaBand.astro';
+import warmTub from '../assets/photos/warm-tub.jpg';
+---
+
+<Base title="Our Work" description="Browse RMC Tile's recent projects - kitchens, baths, showers, floors, and custom tile across Loveland and Northern Colorado.">
+  <SubpageHero
+    bannerImage={warmTub}
+    bannerAlt="Bright tiled bathroom"
+    breadcrumb="Our Work"
+    eyebrow="Our Work"
+    title="Recently Set in Northern Colorado"
+    description="Kitchens, baths, showers, floors, and custom tile across Loveland and the Front Range. Filter by room, or click any photo to enlarge."
+  />
+
+  <Gallery />
+
+  <CtaBand headline="Like What<br>You See?" description="Tell us about your kitchen or bath and we'll get you a real number\u2014materials and labor, line by line." />
+</Base>

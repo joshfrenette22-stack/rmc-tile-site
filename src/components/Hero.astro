@@ -1,0 +1,130 @@
+---
+import { Image } from 'astro:assets';
+import tileStack from '../assets/photos/tile-stack.png';
+---
+
+<header class="hero" id="top">
+  <div class="hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow" style="color:var(--color-orange);margin-bottom:20px;">Loveland &middot; all of Northern Colorado</div>
+      <h1>Tile Set Right,<br>Start to Finish.</h1>
+      <p class="sub">Kitchen &amp; bath tile for new builds and remodels&mdash;floors, showers, shower pans, backsplashes, and custom work. Twenty years on the trowel.</p>
+      <form class="pill" action="/contact">
+        <input type="text" placeholder="Enter your address" aria-label="Your address" name="address">
+        <button type="submit">Get a free estimate</button>
+      </form>
+    </div>
+    <div class="hero-art">
+      <Image src={tileStack} alt="Stack of RMC tile samples - marble, terracotta, patterned, and gloss" width={700} loading="eager" />
+    </div>
+  </div>
+</header>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    padding-top: 76px;
+    isolation: isolate;
+    background: #fff;
+  }
+  .hero-grid {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 48px;
+    display: grid;
+    grid-template-columns: 1.02fr 0.98fr;
+    gap: 48px;
+    align-items: center;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 0.98;
+    font-size: clamp(40px, 6vw, 84px);
+    color: var(--color-ink);
+  }
+  .sub {
+    margin-top: 20px;
+    font-size: clamp(16px, 1.6vw, 21px);
+    color: var(--color-body);
+    max-width: 42ch;
+    font-weight: 500;
+  }
+  .hero-art {
+    position: relative;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: clamp(320px, 46vw, 620px);
+  }
+  .hero-art :global(img) {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 700px;
+    height: auto;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+  }
+
+  /* Address pill */
+  .pill {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 440px;
+    height: 60px;
+    background: #fff;
+    border: 1px solid var(--color-canvas-line);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px -22px rgba(76, 40, 6, 0.4);
+  }
+  .pill:focus-within { border-color: var(--color-orange); }
+  .pill input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0 14px 0 18px;
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--color-ink);
+  }
+  .pill input::placeholder { color: #9a917f; }
+  .pill button {
+    height: 46px;
+    margin: 0 7px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 8px;
+    background: var(--color-orange);
+    color: #fff;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 14.5px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .pill button:hover { background: var(--color-orange-deep); }
+
+  @media (max-width: 860px) {
+    .hero { min-height: 0; padding-bottom: 40px; }
+    .hero-grid { grid-template-columns: 1fr; gap: 4px; padding-top: 20px; }
+    .hero-copy { order: 1; }
+    .hero-art { order: 2; min-height: 0; }
+    .hero-art :global(img) { max-width: 90%; }
+  }
+</style>

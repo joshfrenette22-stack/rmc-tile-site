@@ -1,0 +1,79 @@
+---
+import ServiceCard from './ServiceCard.astro';
+import coolChevron from '../assets/photos/cool-chevron.jpg';
+import warmSubway from '../assets/photos/warm-subway.jpg';
+import coolHerringbone from '../assets/photos/cool-herringbone.jpg';
+import warmGreenBath from '../assets/photos/warm-green-bath.jpg';
+import coolLargeformat from '../assets/photos/cool-largeformat.jpg';
+
+interface Props {
+  eyebrow?: string;
+  heading?: string;
+  description?: string;
+}
+
+const {
+  eyebrow = 'What We Do',
+  heading = 'Kitchen & Bath Tile, Start to Finish',
+  description = 'New builds and remodels across Northern Colorado\u2014set dead level, sealed right, and finished clean.',
+} = Astro.props;
+
+const services = [
+  { num: '01', title: 'Showers & Shower Pans', description: 'Waterproofed, sloped, and tiled to stay dry for the long haul\u2014custom pans, niches, and benches included.', image: coolChevron, alt: 'Tiled walk-in shower', tall: true },
+  { num: '02', title: 'Backsplashes', description: 'From classic subway to full-height behind the range.', image: warmSubway, alt: 'Kitchen backsplash' },
+  { num: '03', title: 'Floors', description: 'Kitchens, baths, entries, and laundry\u2014laid flat and true.', image: coolHerringbone, alt: 'Tile floor' },
+  { num: '04', title: 'Custom Tile', description: 'Fireplaces, feature walls, and the details that make a room.', image: warmGreenBath, alt: 'Bathroom tile' },
+  { num: '05', title: 'New Builds & Remodels', description: 'Working with builders and designers, or directly with homeowners\u2014from rough-in to final grout.', image: coolLargeformat, alt: 'Large-format tile' },
+];
+---
+
+<section class="services" id="services">
+  <div class="services-in">
+    <div class="services-head">
+      <div>
+        <div class="eyebrow" style="color:var(--color-orange);margin-bottom:18px;">{eyebrow}</div>
+        <h2>{heading}</h2>
+      </div>
+      <p>{description}</p>
+    </div>
+    <div class="svc-grid">
+      {services.map((s) => (
+        <ServiceCard {...s} />
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .services { background: var(--color-canvas); padding: clamp(72px, 9vw, 128px) 0; border-top: 1px solid var(--color-line); }
+  .services-in { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+  .services-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+    font-size: clamp(30px, 3.8vw, 52px);
+    color: var(--color-ink);
+    max-width: 18ch;
+  }
+  .services-head p {
+    font-size: 17px;
+    color: var(--color-body);
+    max-width: 38ch;
+    line-height: 1.55;
+  }
+  .svc-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  @media (max-width: 860px) { .svc-grid { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import SubpageHero from '../components/SubpageHero.astro';
+import ContactForm from '../components/ContactForm.astro';
+import coolFloor from '../assets/photos/cool-floor.jpg';
+---
+
+<Base title="Contact" description="Get a free tile estimate from RMC Tile. Send a few details about your kitchen or bath and Roy will get back to you within 24-48 hours.">
+  <SubpageHero
+    bannerImage={coolFloor}
+    bannerAlt="Bright airy interior"
+    breadcrumb="Contact"
+    eyebrow="Free Estimates"
+    title="Tell Us About Your Project."
+    description="Send a few details about your kitchen or bath and Roy will get back to you with a real, written estimate\u2014usually within 24\u201348 hours."
+  />
+
+  <section class="section-pad" style="background:var(--color-canvas);">
+    <div class="container">
+      <ContactForm />
+    </div>
+  </section>
+</Base>

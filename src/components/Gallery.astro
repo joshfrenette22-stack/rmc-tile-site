@@ -1,0 +1,301 @@
+---
+import { Image } from 'astro:assets';
+
+// Import the 18 curated photos with categories
+import coolChevron from '../assets/photos/cool-chevron.jpg';
+import coolFloor from '../assets/photos/cool-floor.jpg';
+import coolHerringbone from '../assets/photos/cool-herringbone.jpg';
+import coolPlank from '../assets/photos/cool-plank.jpg';
+import coolStriatedShower from '../assets/photos/cool-striated-shower.jpg';
+import warmTub from '../assets/photos/warm-tub.jpg';
+import coolKitchen from '../assets/photos/cool-kitchen.jpg';
+import warmFireplace from '../assets/photos/warm-fireplace.jpg';
+import warmStone from '../assets/photos/warm-stone.jpg';
+import coolBasketweaveShower from '../assets/photos/cool-basketweave-shower.jpg';
+import coolBenchShower from '../assets/photos/cool-bench-shower.jpg';
+import coolLargeformat from '../assets/photos/cool-largeformat.jpg';
+import warmSubway from '../assets/photos/warm-subway.jpg';
+import coolBlackaccentShower from '../assets/photos/cool-blackaccent-shower.jpg';
+import warmGreenPowder from '../assets/photos/warm-green-powder.jpg';
+import warmGreenLaundry from '../assets/photos/warm-green-laundry.jpg';
+import warmPowder from '../assets/photos/warm-powder.jpg';
+import warmGreenBath from '../assets/photos/warm-green-bath.jpg';
+
+// Glob import ALL photos from the assets/photos directory for the extended gallery
+const allPhotos = import.meta.glob<{ default: ImageMetadata }>('../assets/photos/*.{jpg,jpeg,png}', { eager: true });
+
+// Curated photos with categories
+const curatedPhotos = [
+  { src: coolChevron, alt: 'Chevron marble shower', cap: 'Chevron marble shower', cat: 'showers' },
+  { src: coolFloor, alt: 'Stone-look floor · Windsor', cap: 'Stone-look floor · Windsor', cat: 'floors' },
+  { src: coolHerringbone, alt: 'Herringbone floor', cap: 'Herringbone floor', cat: 'floors' },
+  { src: coolPlank, alt: 'Plank-tile floor', cap: 'Plank-tile floor', cat: 'floors' },
+  { src: coolStriatedShower, alt: 'Striated marble shower', cap: 'Striated marble shower', cat: 'showers' },
+  { src: warmTub, alt: 'Tub surround · Loveland', cap: 'Tub surround · Loveland', cat: 'baths' },
+  { src: coolKitchen, alt: 'Kitchen backsplash · Fort Collins', cap: 'Kitchen backsplash · Fort Collins', cat: 'kitchens' },
+  { src: warmFireplace, alt: 'Fireplace surround', cap: 'Fireplace surround', cat: 'custom' },
+  { src: warmStone, alt: 'Stone feature wall', cap: 'Stone feature wall', cat: 'custom' },
+  { src: coolBasketweaveShower, alt: 'Basketweave niche shower', cap: 'Basketweave niche shower', cat: 'showers' },
+  { src: coolBenchShower, alt: 'Large-format bench shower', cap: 'Large-format bench shower', cat: 'showers' },
+  { src: coolLargeformat, alt: 'Large-format shower', cap: 'Large-format shower', cat: 'showers' },
+  { src: warmSubway, alt: 'Subway backsplash', cap: 'Subway backsplash', cat: 'kitchens' },
+  { src: coolBlackaccentShower, alt: 'Black-accent shower', cap: 'Black-accent shower', cat: 'showers' },
+  { src: warmGreenPowder, alt: 'Green powder room', cap: 'Green powder room', cat: 'baths' },
+  { src: warmGreenLaundry, alt: 'Laundry & entry floor', cap: 'Laundry & entry floor', cat: 'floors' },
+  { src: warmPowder, alt: 'Powder room', cap: 'Powder room', cat: 'baths' },
+  { src: warmGreenBath, alt: 'Walk-in shower', cap: 'Walk-in shower', cat: 'showers' },
+];
+
+// Curated file names to exclude from the "all photos" glob
+const curatedFileNames = new Set([
+  'cool-chevron.jpg', 'cool-floor.jpg', 'cool-herringbone.jpg', 'cool-plank.jpg',
+  'cool-striated-shower.jpg', 'warm-tub.jpg', 'cool-kitchen.jpg', 'warm-fireplace.jpg',
+  'warm-stone.jpg', 'cool-basketweave-shower.jpg', 'cool-bench-shower.jpg',
+  'cool-largeformat.jpg', 'warm-subway.jpg', 'cool-blackaccent-shower.jpg',
+  'warm-green-powder.jpg', 'warm-green-laundry.jpg', 'warm-powder.jpg',
+  'warm-green-bath.jpg', 'tile-stack.png',
+]);
+
+// Get remaining photos (not curated, not tile-stack)
+const remainingPhotos = Object.entries(allPhotos)
+  .filter(([path]) => {
+    const fileName = path.split('/').pop() || '';
+    return !curatedFileNames.has(fileName);
+  })
+  .map(([path, mod]) => ({
+    src: mod.default,
+    alt: 'RMC Tile project',
+    cap: 'Northern Colorado',
+    cat: 'all' as string,
+  }));
+
+// Combine: curated first, then remaining
+const allGalleryPhotos = [...curatedPhotos, ...remainingPhotos];
+
+const filters = ['all', 'kitchens', 'baths', 'showers', 'floors', 'custom'];
+const filterLabels: Record<string, string> = {
+  all: 'All Work', kitchens: 'Kitchens', baths: 'Baths',
+  showers: 'Showers', floors: 'Floors', custom: 'Custom',
+};
+---
+
+<section class="section-pad" style="background:var(--color-canvas);">
+  <div class="container">
+    <div class="filters" id="filters">
+      {filters.map((f) => (
+        <button class:list={[{ active: f === 'all' }]} data-filter={f}>{filterLabels[f]}</button>
+      ))}
+    </div>
+
+    <div class="gallery" id="gallery">
+      {allGalleryPhotos.map((p) => (
+        <figure data-cat={p.cat}>
+          <img
+            src={p.src.src}
+            width={p.src.width}
+            height={p.src.height}
+            alt={p.alt}
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption>{p.cap}</figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="close" id="lbClose" aria-label="Close">&times;</button>
+  <button class="nav-arrow prev" id="lbPrev" aria-label="Previous">&#8249;</button>
+  <img id="lbImg" src="" alt="">
+  <button class="nav-arrow next" id="lbNext" aria-label="Next">&#8250;</button>
+</div>
+
+<script>
+  // Gallery filter
+  const btns = document.querySelectorAll('#filters button');
+  const figs = Array.from(document.querySelectorAll('#gallery figure'));
+
+  btns.forEach((b) => {
+    b.addEventListener('click', () => {
+      btns.forEach((x) => x.classList.remove('active'));
+      b.classList.add('active');
+      const f = (b as HTMLElement).dataset.filter;
+      figs.forEach((fig) => {
+        const cat = (fig as HTMLElement).dataset.cat;
+        fig.classList.toggle('hide', f !== 'all' && cat !== f);
+      });
+    });
+  });
+
+  // Lightbox
+  const lb = document.getElementById('lightbox')!;
+  const lbImg = document.getElementById('lbImg') as HTMLImageElement;
+  let idx = 0;
+
+  function visible() { return figs.filter((f) => !f.classList.contains('hide')); }
+
+  function openLb(fig: Element) {
+    const v = visible();
+    idx = v.indexOf(fig);
+    showLb();
+    lb.classList.add('open');
+    lb.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function showLb() {
+    const v = visible();
+    const el = v[idx].querySelector('img')!;
+    lbImg.src = (el as HTMLImageElement).src;
+    lbImg.alt = (el as HTMLImageElement).alt;
+  }
+
+  function closeLb() {
+    lb.classList.remove('open');
+    lb.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  function stepLb(d: number) {
+    const v = visible();
+    idx = (idx + d + v.length) % v.length;
+    showLb();
+  }
+
+  figs.forEach((fig) => fig.addEventListener('click', () => openLb(fig)));
+  document.getElementById('lbClose')!.addEventListener('click', closeLb);
+  document.getElementById('lbPrev')!.addEventListener('click', (e) => { e.stopPropagation(); stepLb(-1); });
+  document.getElementById('lbNext')!.addEventListener('click', (e) => { e.stopPropagation(); stepLb(1); });
+  lb.addEventListener('click', (e) => { if (e.target === lb) closeLb(); });
+  document.addEventListener('keydown', (e) => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLb();
+    if (e.key === 'ArrowLeft') stepLb(-1);
+    if (e.key === 'ArrowRight') stepLb(1);
+  });
+</script>
+
+<style>
+  /* Filters */
+  .filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 36px; }
+  .filters :global(button) {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    background: #fff;
+    border: 1px solid var(--color-canvas-line);
+    border-radius: 999px;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .filters :global(button:hover) { border-color: var(--color-orange); }
+  .filters :global(button.active) {
+    background: var(--color-ink);
+    color: var(--color-beige);
+    border-color: var(--color-ink);
+  }
+
+  /* Gallery masonry */
+  .gallery { columns: 3; column-gap: 16px; }
+  .gallery :global(figure) {
+    break-inside: avoid;
+    margin: 0 0 16px;
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: zoom-in;
+    isolation: isolate;
+  }
+  .gallery :global(figure img) {
+    width: 100%;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .gallery :global(figure:hover img) { transform: scale(1.05); }
+  .gallery :global(figcaption) {
+    position: absolute;
+    left: 14px; bottom: 12px; right: 14px;
+    z-index: 2;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-beige);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: 0.3s;
+  }
+  .gallery :global(figure::after) {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(180deg, transparent 55%, rgba(17,17,17,0.6));
+    opacity: 0;
+    transition: 0.3s;
+  }
+  .gallery :global(figure:hover figcaption),
+  .gallery :global(figure:hover::after) {
+    opacity: 1;
+    transform: none;
+  }
+  .gallery :global(figure.hide) { display: none; }
+  @media (max-width: 980px) { .gallery { columns: 2; } }
+  @media (max-width: 560px) { .gallery { columns: 1; } }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(17,17,17,0.92);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 5vw;
+  }
+  .lightbox:global(.open) { display: flex; }
+  .lightbox :global(#lbImg) {
+    max-width: 90vw;
+    max-height: 86vh;
+    border-radius: 10px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  }
+  .close {
+    position: absolute;
+    top: 22px; right: 26px;
+    width: 46px; height: 46px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,247,233,0.4);
+    background: transparent;
+    color: var(--color-beige);
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .close:hover { background: rgba(255,247,233,0.12); }
+  .nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 54px; height: 54px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,247,233,0.4);
+    background: transparent;
+    color: var(--color-beige);
+    font-size: 24px;
+    cursor: pointer;
+  }
+  .nav-arrow:hover { background: rgba(255,247,233,0.12); }
+  .prev { left: 3vw; }
+  .next { right: 3vw; }
+  @media (max-width: 560px) { .nav-arrow { display: none; } }
+</style>

@@ -1,0 +1,204 @@
+---
+import logo from '../assets/brand/logo-final.svg';
+
+const links = [
+  { label: 'Our Work', href: '/our-work' },
+  { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/contact' },
+  { label: 'Free estimate', href: '/contact' },
+];
+---
+
+<footer class="site-footer">
+  <!-- Grid pattern overlay -->
+  <div class="footer-grid-overlay" aria-hidden="true"></div>
+  <!-- Warm radial glow -->
+  <div class="footer-glow" aria-hidden="true"></div>
+
+  <div class="footer-inner">
+    <div class="footer-top">
+      <!-- Logo -->
+      <div class="footer-logo-col">
+        <a href="/" aria-label="RMC Tile home">
+          <img src={logo.src} alt="RMC Tile" class="footer-logo" />
+        </a>
+      </div>
+
+      <!-- Contact block -->
+      <div class="footer-contact">
+        <a href="tel:+19704059301" class="footer-phone">(970) 405-9301</a>
+        <p class="footer-locale">Loveland &middot; all of Northern Colorado</p>
+        <a href="https://rmctile.co" class="footer-url" target="_blank" rel="noopener">rmctile.co</a>
+      </div>
+
+      <!-- Link column -->
+      <nav class="footer-links" aria-label="Footer navigation">
+        <ul>
+          {links.map((link) => (
+            <li>
+              <a href={link.href} class="footer-link">{link.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Bottom rule -->
+    <div class="footer-bottom">
+      <span class="footer-fine">RMC Construction LLC &middot; Tile &middot; Est. 2019</span>
+      <span class="footer-fine">Kitchen &amp; bath &middot; new builds &amp; remodels</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    width: 100%;
+    background: var(--color-ink, #111);
+    overflow: hidden;
+    padding: 72px 0 0;
+  }
+
+  /* CSS grid pattern overlay */
+  .footer-grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255, 247, 233, 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 247, 233, 0.07) 1px, transparent 1px);
+    background-size: 74px 74px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Warm radial glow via ::after */
+  .footer-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .footer-glow::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at top right, rgba(246, 111, 0, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at bottom left, rgba(90, 50, 20, 0.15) 0%, transparent 60%);
+  }
+
+  .footer-inner {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 48px;
+    align-items: start;
+    padding-bottom: 56px;
+  }
+
+  /* Logo — reversed to cream */
+  .footer-logo {
+    height: 42px;
+    width: auto;
+    display: block;
+    filter: invert(1) brightness(1.7);
+  }
+
+  /* Contact block */
+  .footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .footer-phone {
+    font-family: var(--font-mono);
+    font-size: 16px;
+    color: var(--color-beige, #FFF7E9);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .footer-phone:hover {
+    opacity: 0.7;
+  }
+
+  .footer-locale {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: rgba(255, 247, 233, 0.5);
+    margin: 0;
+  }
+
+  .footer-url {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-orange, #F66F00);
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .footer-url:hover {
+    opacity: 0.7;
+  }
+
+  /* Link column */
+  .footer-links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-link {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: rgba(255, 247, 233, 0.65);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .footer-link:hover {
+    color: var(--color-beige, #FFF7E9);
+  }
+
+  /* Bottom rule + fine print */
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 247, 233, 0.1);
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .footer-fine {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: rgba(255, 247, 233, 0.3);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .footer-top {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+
+    .footer-bottom {
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+</style>

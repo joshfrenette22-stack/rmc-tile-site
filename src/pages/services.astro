@@ -1,0 +1,39 @@
+---
+import Base from '../layouts/Base.astro';
+import SubpageHero from '../components/SubpageHero.astro';
+import ServicesGrid from '../components/ServicesGrid.astro';
+import Values from '../components/Values.astro';
+import CtaBand from '../components/CtaBand.astro';
+import coolKitchen from '../assets/photos/cool-kitchen.jpg';
+
+const includesValues = [
+  { label: 'Prep', title: 'Proper waterproofing', description: 'Membranes, slopes, and substrate done to spec before a single tile is set\u2014so wet areas stay dry for good.' },
+  { label: 'Layout', title: 'Snapped to the room', description: 'Lines planned around sightlines and focal points, so cuts land where they should and grout joints stay true.' },
+  { label: 'Finish', title: 'Clean, protected site', description: "We protect floors and fixtures, clean up daily, and leave the space ready to use\u2014not a mess to deal with." },
+];
+---
+
+<Base title="Services" description="Kitchen and bath tile services - showers, shower pans, backsplashes, floors, custom tile, new builds, and remodels across Northern Colorado.">
+  <SubpageHero
+    bannerImage={coolKitchen}
+    bannerAlt="Bright white kitchen"
+    breadcrumb="Services"
+    eyebrow="What We Do"
+    title="Tile, Done Right\u2014Room by Room."
+    description="Kitchen and bath tile for new builds and remodels across Northern Colorado\u2014set dead level, sealed right, and finished clean by one craftsman, start to finish."
+  />
+
+  <ServicesGrid
+    eyebrow="Core Services"
+    heading="Everything Tile, Under One Trade"
+    description="Floors, showers, shower pans, backsplashes, and custom work\u2014for homeowners, builders, and designers."
+  />
+
+  <Values
+    eyebrow="Every Job Includes"
+    heading="The parts that decide whether tile lasts"
+    values={includesValues}
+  />
+
+  <CtaBand headline="Ready to<br>Get Started?" description="Tell us about your kitchen or bath and we'll get you a real number\u2014materials and labor, line by line." />
+</Base>

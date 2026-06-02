@@ -1,0 +1,56 @@
+---
+const words = [
+  'Kitchen & Bath', 'Showers', 'Backsplashes', 'Shower Pans',
+  'Floors', 'Custom Tile', 'Fireplaces', 'Remodels'
+];
+---
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    {[...words, ...words].map((w, i) => (
+      <Fragment>
+        <span class:list={['w', { out: i % 2 === 1 }]}>{w}</span>
+        <span class="dot"></span>
+      </Fragment>
+    ))}
+  </div>
+</div>
+
+<style>
+  .ticker {
+    background: var(--color-ink);
+    overflow: hidden;
+    padding: 20px 0;
+    display: flex;
+    user-select: none;
+  }
+  .ticker-track {
+    display: flex;
+    align-items: center;
+    gap: 34px;
+    flex: none;
+    padding-right: 34px;
+    white-space: nowrap;
+    animation: tick 32s linear infinite;
+    will-change: transform;
+  }
+  .w {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    font-size: clamp(26px, 3vw, 40px);
+    color: var(--color-beige);
+    text-transform: uppercase;
+  }
+  .w.out {
+    color: transparent;
+    -webkit-text-stroke: 1.4px rgba(255,247,233,0.55);
+  }
+  .dot {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--color-orange);
+    flex: none;
+  }
+</style>

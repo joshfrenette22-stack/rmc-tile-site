@@ -1,0 +1,159 @@
+---
+import logo from '../assets/brand/logo-final.svg';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+
+const links = [
+  { label: 'About', href: '/about' },
+  { label: 'Our Work', href: '/our-work' },
+  { label: 'Services', href: '/services' },
+  { label: 'Contact', href: '/contact' },
+];
+---
+
+<nav class="nav-pill" id="main-nav">
+  <a href="/" class="nav-logo" aria-label="RMC Tile home">
+    <img src={logo.src} alt="RMC Tile" class="nav-logo-img" />
+  </a>
+
+  <ul class="nav-links">
+    {links.map((link) => (
+      <li>
+        <a
+          href={link.href}
+          class:list={['nav-link', { active: currentPath === link.href }]}
+        >
+          {link.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <a href="/contact" class="nav-cta">Free estimate</a>
+</nav>
+
+<style>
+  .nav-pill {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    background: #fff;
+    border-radius: 10px;
+    padding: 10px 16px 10px 20px;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+    transition: top 0.4s ease;
+    will-change: top;
+  }
+
+  .nav-pill.nav-hidden {
+    top: -80px;
+  }
+
+  /* Logo */
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .nav-logo-img {
+    height: 24px;
+    width: auto;
+    display: block;
+  }
+
+  /* Center links */
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-link {
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    color: #111;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .nav-link:hover {
+    opacity: 0.55;
+  }
+
+  .nav-link.active {
+    opacity: 0.55;
+    font-weight: 600;
+  }
+
+  /* CTA button */
+  .nav-cta {
+    font-family: var(--font-body);
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #fff;
+    background: #F66F00;
+    border-radius: 7px;
+    padding: 8px 18px;
+    text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  .nav-cta:hover {
+    opacity: 0.88;
+  }
+
+  /* Responsive: hide links below 860px */
+  @media (max-width: 859px) {
+    .nav-links {
+      display: none;
+    }
+
+    .nav-pill {
+      gap: 16px;
+    }
+  }
+</style>
+
+<script>
+  const nav = document.getElementById('main-nav');
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+
+  function onScroll() {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY && currentScrollY > 60) {
+      // Scrolling down
+      nav?.classList.add('nav-hidden');
+    } else {
+      // Scrolling up
+      nav?.classList.remove('nav-hidden');
+    }
+
+    lastScrollY = currentScrollY;
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      window.requestAnimationFrame(onScroll);
+      ticking = true;
+    }
+  });
+</script>
