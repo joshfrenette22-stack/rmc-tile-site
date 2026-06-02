@@ -1,81 +1,581 @@
 ---
 import { Image } from 'astro:assets';
 
-// Import the 18 curated photos with categories
-import coolChevron from '../assets/photos/cool-chevron.jpg';
-import coolFloor from '../assets/photos/cool-floor.jpg';
-import coolHerringbone from '../assets/photos/cool-herringbone.jpg';
-import coolPlank from '../assets/photos/cool-plank.jpg';
-import coolStriatedShower from '../assets/photos/cool-striated-shower.jpg';
-import warmTub from '../assets/photos/warm-tub.jpg';
-import coolKitchen from '../assets/photos/cool-kitchen.jpg';
-import warmFireplace from '../assets/photos/warm-fireplace.jpg';
-import warmStone from '../assets/photos/warm-stone.jpg';
-import coolBasketweaveShower from '../assets/photos/cool-basketweave-shower.jpg';
-import coolBenchShower from '../assets/photos/cool-bench-shower.jpg';
-import coolLargeformat from '../assets/photos/cool-largeformat.jpg';
-import warmSubway from '../assets/photos/warm-subway.jpg';
-import coolBlackaccentShower from '../assets/photos/cool-blackaccent-shower.jpg';
-import warmGreenPowder from '../assets/photos/warm-green-powder.jpg';
-import warmGreenLaundry from '../assets/photos/warm-green-laundry.jpg';
-import warmPowder from '../assets/photos/warm-powder.jpg';
-import warmGreenBath from '../assets/photos/warm-green-bath.jpg';
-
-// Glob import ALL photos from the assets/photos directory for the extended gallery
+// Glob import ALL photos from the assets/photos directory
 const allPhotos = import.meta.glob<{ default: ImageMetadata }>('../assets/photos/*.{jpg,jpeg,png}', { eager: true });
 
-// Curated photos with categories
-const curatedPhotos = [
-  { src: coolChevron, alt: 'Chevron marble shower', cap: 'Chevron marble shower', cat: 'showers' },
-  { src: coolFloor, alt: 'Stone-look floor · Windsor', cap: 'Stone-look floor · Windsor', cat: 'floors' },
-  { src: coolHerringbone, alt: 'Herringbone floor', cap: 'Herringbone floor', cat: 'floors' },
-  { src: coolPlank, alt: 'Plank-tile floor', cap: 'Plank-tile floor', cat: 'floors' },
-  { src: coolStriatedShower, alt: 'Striated marble shower', cap: 'Striated marble shower', cat: 'showers' },
-  { src: warmTub, alt: 'Tub surround · Loveland', cap: 'Tub surround · Loveland', cat: 'baths' },
-  { src: coolKitchen, alt: 'Kitchen backsplash · Fort Collins', cap: 'Kitchen backsplash · Fort Collins', cat: 'kitchens' },
-  { src: warmFireplace, alt: 'Fireplace surround', cap: 'Fireplace surround', cat: 'custom' },
-  { src: warmStone, alt: 'Stone feature wall', cap: 'Stone feature wall', cat: 'custom' },
-  { src: coolBasketweaveShower, alt: 'Basketweave niche shower', cap: 'Basketweave niche shower', cat: 'showers' },
-  { src: coolBenchShower, alt: 'Large-format bench shower', cap: 'Large-format bench shower', cat: 'showers' },
-  { src: coolLargeformat, alt: 'Large-format shower', cap: 'Large-format shower', cat: 'showers' },
-  { src: warmSubway, alt: 'Subway backsplash', cap: 'Subway backsplash', cat: 'kitchens' },
-  { src: coolBlackaccentShower, alt: 'Black-accent shower', cap: 'Black-accent shower', cat: 'showers' },
-  { src: warmGreenPowder, alt: 'Green powder room', cap: 'Green powder room', cat: 'baths' },
-  { src: warmGreenLaundry, alt: 'Laundry & entry floor', cap: 'Laundry & entry floor', cat: 'floors' },
-  { src: warmPowder, alt: 'Powder room', cap: 'Powder room', cat: 'baths' },
-  { src: warmGreenBath, alt: 'Walk-in shower', cap: 'Walk-in shower', cat: 'showers' },
-];
+// Complete category map for every photo
+const categoryMap: Record<string, string> = {
+  // --- Curated (cool-* / warm-*) ---
+  'cool-chevron.jpg': 'showers',
+  'cool-floor.jpg': 'floors',
+  'cool-herringbone.jpg': 'floors',
+  'cool-plank.jpg': 'floors',
+  'cool-striated-shower.jpg': 'showers',
+  'warm-tub.jpg': 'baths',
+  'cool-kitchen.jpg': 'kitchens',
+  'warm-fireplace.jpg': 'custom',
+  'warm-stone.jpg': 'custom',
+  'cool-basketweave-shower.jpg': 'showers',
+  'cool-bench-shower.jpg': 'showers',
+  'cool-largeformat.jpg': 'showers',
+  'warm-subway.jpg': 'kitchens',
+  'cool-blackaccent-shower.jpg': 'showers',
+  'warm-green-powder.jpg': 'baths',
+  'warm-green-laundry.jpg': 'floors',
+  'warm-powder.jpg': 'baths',
+  'warm-green-bath.jpg': 'showers',
 
-// Curated file names to exclude from the "all photos" glob
-const curatedFileNames = new Set([
+  // --- IMG_0xxx ---
+  'IMG_0006.jpeg': 'custom',
+  'IMG_0008.jpeg': 'showers',
+  'IMG_0009.jpeg': 'custom',
+  'IMG_0067.jpeg': 'showers',
+  'IMG_0068.jpeg': 'baths',
+  'IMG_0069.jpeg': 'showers',
+  'IMG_0070.jpeg': 'kitchens',
+  'IMG_0071.jpeg': 'kitchens',
+  'IMG_0072.jpeg': 'kitchens',
+  'IMG_0073.jpeg': 'custom',
+  'IMG_0177.jpeg': 'showers',
+  'IMG_0178.jpeg': 'showers',
+  'IMG_0303.jpeg': 'custom',
+  'IMG_0340.jpeg': 'custom',
+  'IMG_0350.jpeg': 'custom',
+  'IMG_0352.jpeg': 'custom',
+  'IMG_0353.jpeg': 'custom',
+  'IMG_0789.jpeg': 'baths',
+  'IMG_0792.jpeg': 'showers',
+  'IMG_0793.jpeg': 'showers',
+  'IMG_0796.jpeg': 'kitchens',
+  'IMG_0798.jpeg': 'showers',
+
+  // --- IMG_1xxx ---
+  'IMG_1038.jpeg': 'showers',
+  'IMG_1042.jpeg': 'showers',
+  'IMG_1045.jpeg': 'showers',
+  'IMG_1047.jpeg': 'showers',
+  'IMG_1048.jpeg': 'showers',
+  'IMG_1069.jpeg': 'showers',
+  'IMG_1121.jpeg': 'showers',
+  'IMG_1290.jpeg': 'showers',
+  'IMG_1330.jpeg': 'kitchens',
+  'IMG_1335.jpeg': 'kitchens',
+  'IMG_1368.jpeg': 'floors',
+  'IMG_1371.jpeg': 'floors',
+  'IMG_1391.jpeg': 'showers',
+  'IMG_1409.jpeg': 'custom',
+  'IMG_1470.jpeg': 'floors',
+  'IMG_1471.jpeg': 'floors',
+  'IMG_1473.jpeg': 'floors',
+  'IMG_1495.jpeg': 'custom',
+  'IMG_1497.jpeg': 'custom',
+  'IMG_1499.jpeg': 'custom',
+  'IMG_1500.jpeg': 'custom',
+  'IMG_1501.jpeg': 'custom',
+  'IMG_1502.jpeg': 'floors',
+  'IMG_1503.jpeg': 'custom',
+  'IMG_1505.jpeg': 'floors',
+  'IMG_1510.jpeg': 'custom',
+  'IMG_1512.jpeg': 'custom',
+  'IMG_1515.jpeg': 'custom',
+  'IMG_1517.jpeg': 'custom',
+  'IMG_1528 (1).jpeg': 'baths',
+  'IMG_1528.jpeg': 'custom',
+  'IMG_1529.jpeg': 'baths',
+  'IMG_1530.jpeg': 'baths',
+  'IMG_1630.jpeg': 'showers',
+  'IMG_1642.jpeg': 'floors',
+  'IMG_1643.jpeg': 'floors',
+  'IMG_1644.jpeg': 'floors',
+  'IMG_1645.jpeg': 'baths',
+  'IMG_1649.jpeg': 'custom',
+  'IMG_1650.jpeg': 'kitchens',
+  'IMG_1653.jpeg': 'showers',
+  'IMG_1655.jpeg': 'custom',
+  'IMG_1656.jpeg': 'custom',
+  'IMG_1657.jpeg': 'custom',
+  'IMG_1658.jpeg': 'custom',
+  'IMG_1660.jpeg': 'custom',
+  'IMG_1970.jpeg': 'showers',
+  'IMG_1971.jpeg': 'showers',
+  'IMG_1972.jpeg': 'showers',
+
+  // --- IMG_2xxx ---
+  'IMG_2097.jpeg': 'showers',
+  'IMG_2198.jpeg': 'showers',
+  'IMG_2201.jpeg': 'showers',
+  'IMG_2203.jpeg': 'custom',
+  'IMG_2274.jpeg': 'showers',
+  'IMG_2275.jpeg': 'showers',
+  'IMG_2276.jpeg': 'showers',
+  'IMG_2278.jpeg': 'showers',
+  'IMG_2340.jpeg': 'showers',
+  'IMG_2405.jpeg': 'showers',
+  'IMG_2471.jpeg': 'floors',
+  'IMG_2473.jpeg': 'kitchens',
+  'IMG_2642.jpeg': 'kitchens',
+  'IMG_2643.jpeg': 'kitchens',
+  'IMG_2644.jpeg': 'kitchens',
+  'IMG_2645.jpeg': 'showers',
+  'IMG_2661.jpeg': 'baths',
+  'IMG_2681.jpeg': 'kitchens',
+  'IMG_2712.jpeg': 'baths',
+  'IMG_2713.jpeg': 'baths',
+  'IMG_2715.jpeg': 'showers',
+  'IMG_2716.jpeg': 'baths',
+  'IMG_2719.jpeg': 'showers',
+  'IMG_2721.jpeg': 'showers',
+  'IMG_2738.jpeg': 'kitchens',
+  'IMG_2740.jpeg': 'kitchens',
+
+  // --- IMG_3xxx-4xxx ---
+  'IMG_3006.jpeg': 'showers',
+  'IMG_3080.jpeg': 'showers',
+  'IMG_3125.jpeg': 'showers',
+  'IMG_3928.jpeg': 'custom',
+  'IMG_4247.jpeg': 'custom',
+  'IMG_4250.jpeg': 'custom',
+  'IMG_4251.jpeg': 'custom',
+
+  // --- IMG_5xxx ---
+  'IMG_5446.jpeg': 'showers',
+  'IMG_5448.jpeg': 'baths',
+  'IMG_5452.jpeg': 'custom',
+  'IMG_5455.jpeg': 'showers',
+  'IMG_5457.jpeg': 'custom',
+  'IMG_5459.jpeg': 'kitchens',
+  'IMG_5460.jpeg': 'custom',
+  'IMG_5464.jpeg': 'custom',
+  'IMG_5465.jpeg': 'custom',
+  'IMG_5558.jpeg': 'showers',
+  'IMG_5560.jpeg': 'custom',
+  'IMG_5561.jpeg': 'custom',
+  'IMG_5564.jpeg': 'showers',
+  'IMG_5565.jpeg': 'showers',
+  'IMG_5566.jpeg': 'showers',
+  'IMG_5567.jpeg': 'baths',
+  'IMG_5568.jpeg': 'showers',
+  'IMG_5570.jpeg': 'showers',
+  'IMG_5571.jpeg': 'showers',
+  'IMG_5639.jpeg': 'kitchens',
+  'IMG_5643.jpeg': 'kitchens',
+  'IMG_5644.jpeg': 'kitchens',
+  'IMG_5646.jpeg': 'custom',
+  'IMG_5647.jpeg': 'custom',
+  'IMG_5648.jpeg': 'custom',
+  'IMG_5649.jpeg': 'baths',
+  'IMG_5650.jpeg': 'showers',
+  'IMG_5651.jpeg': 'showers',
+  'IMG_5652.jpeg': 'showers',
+  'IMG_5653.jpeg': 'showers',
+  'IMG_5654.jpeg': 'showers',
+  'IMG_5655.jpeg': 'showers',
+  'IMG_5656.jpeg': 'showers',
+  'IMG_5657.jpeg': 'showers',
+  'IMG_5658.jpeg': 'baths',
+  'IMG_5664.jpeg': 'showers',
+  'IMG_5665.jpeg': 'showers',
+  'IMG_5666.jpeg': 'showers',
+
+  // --- IMG_6xxx ---
+  'IMG_6281.jpeg': 'showers',
+  'IMG_6285.jpeg': 'showers',
+  'IMG_6314.jpeg': 'kitchens',
+  'IMG_6316.jpeg': 'kitchens',
+  'IMG_6330.jpeg': 'showers',
+  'IMG_6358.jpeg': 'showers',
+  'IMG_6359.jpeg': 'showers',
+  'IMG_6390.jpeg': 'showers',
+  'IMG_6391.jpeg': 'showers',
+  'IMG_6397.jpeg': 'showers',
+  'IMG_6398.jpeg': 'showers',
+  'IMG_6867.jpeg': 'custom',
+  'IMG_6890.jpeg': 'baths',
+  'IMG_6988.jpeg': 'baths',
+  'IMG_7014.jpeg': 'baths',
+
+  // --- IMG_7xxx ---
+  'IMG_7229.jpeg': 'custom',
+  'IMG_7230.jpeg': 'custom',
+  'IMG_7232.jpeg': 'custom',
+  'IMG_7482.jpeg': 'kitchens',
+  'IMG_7711.jpeg': 'showers',
+  'IMG_7714.jpeg': 'showers',
+  'IMG_7715.jpeg': 'showers',
+  'IMG_7717.jpeg': 'showers',
+  'IMG_7718.jpeg': 'showers',
+  'IMG_7730.jpeg': 'showers',
+  'IMG_7737.jpeg': 'showers',
+  'IMG_7739.jpeg': 'custom',
+  'IMG_7741.jpeg': 'showers',
+  'IMG_7762.jpeg': 'custom',
+  'IMG_7763.jpeg': 'custom',
+  'IMG_7764.jpeg': 'custom',
+
+  // --- IMG_8xxx ---
+  'IMG_8084.jpeg': 'showers',
+  'IMG_8085.jpeg': 'showers',
+  'IMG_8088.jpeg': 'showers',
+  'IMG_8089.jpeg': 'showers',
+  'IMG_8100.jpeg': 'showers',
+  'IMG_8216.jpeg': 'baths',
+  'IMG_8217.jpeg': 'showers',
+  'IMG_8218.jpeg': 'baths',
+  'IMG_8219.jpeg': 'showers',
+  'IMG_8220.jpeg': 'showers',
+  'IMG_8222.jpeg': 'showers',
+  'IMG_8223.jpeg': 'showers',
+  'IMG_8224.jpeg': 'showers',
+  'IMG_8225.jpeg': 'showers',
+  'IMG_8226.jpeg': 'showers',
+  'IMG_8227.jpeg': 'showers',
+  'IMG_8550.jpeg': 'custom',
+  'IMG_8551.jpeg': 'custom',
+  'IMG_8627.jpeg': 'kitchens',
+  'IMG_8629.jpeg': 'kitchens',
+  'IMG_8653.jpeg': 'custom',
+  'IMG_8654.jpeg': 'custom',
+  'IMG_8655.jpeg': 'baths',
+  'IMG_8656.jpeg': 'custom',
+  'IMG_8657.jpeg': 'custom',
+  'IMG_8658.jpeg': 'custom',
+  'IMG_8659.jpeg': 'custom',
+  'IMG_8661.jpeg': 'baths',
+  'IMG_8707.jpeg': 'kitchens',
+  'IMG_8708.jpeg': 'kitchens',
+  'IMG_8709.jpeg': 'kitchens',
+  'IMG_8710.jpeg': 'kitchens',
+  'IMG_8711.jpeg': 'kitchens',
+  'IMG_8712.jpeg': 'kitchens',
+  'IMG_8713.jpeg': 'kitchens',
+  'IMG_8788.jpeg': 'showers',
+  'IMG_8789.jpeg': 'showers',
+  'IMG_8790.jpeg': 'floors',
+  'IMG_8791.jpeg': 'floors',
+  'IMG_8792.jpeg': 'showers',
+  'IMG_8793.jpeg': 'floors',
+
+  // --- IMG_9xxx ---
+  'IMG_9111.jpeg': 'kitchens',
+  'IMG_9112.jpeg': 'kitchens',
+  'IMG_9113.jpeg': 'kitchens',
+  'IMG_9114.jpeg': 'kitchens',
+  'IMG_9115.jpeg': 'kitchens',
+  'IMG_9116.jpeg': 'kitchens',
+  'IMG_9294.jpeg': 'showers',
+  'IMG_9295.jpeg': 'showers',
+  'IMG_9296.jpeg': 'baths',
+  'IMG_9297.jpeg': 'showers',
+  'IMG_9298.jpeg': 'baths',
+  'IMG_9299.jpeg': 'showers',
+  'IMG_9300.jpeg': 'baths',
+  'IMG_9305.jpeg': 'kitchens',
+  'IMG_9306.jpeg': 'custom',
+  'IMG_9307.jpeg': 'custom',
+  'IMG_9309.jpeg': 'showers',
+  'IMG_9311.jpeg': 'showers',
+  'IMG_9313.jpeg': 'showers',
+  'IMG_9314.jpeg': 'showers',
+  'IMG_9316.jpeg': 'showers',
+  'IMG_9644.jpeg': 'baths',
+  'IMG_9647.jpeg': 'custom',
+  'IMG_9648.jpeg': 'baths',
+  'IMG_9650.jpeg': 'baths',
+
+  // --- UUID photos ---
+  '7490E99A-76CE-487D-A27A-CEFA7EC07933.jpg': 'floors',
+  'BCECAE7E-B7AE-457B-B186-8FEF1794A9C0.jpg': 'floors',
+
+  // --- rmc-tile 001-082 ---
+  'rmc-tile-001.jpg': 'floors',
+  'rmc-tile-002.jpg': 'custom',
+  'rmc-tile-003.jpg': 'floors',
+  'rmc-tile-004.jpg': 'floors',
+  'rmc-tile-005.jpg': 'floors',
+  'rmc-tile-006.jpg': 'baths',
+  'rmc-tile-007.jpg': 'baths',
+  'rmc-tile-008.jpg': 'baths',
+  'rmc-tile-009.jpg': 'kitchens',
+  'rmc-tile-010.jpg': 'kitchens',
+  'rmc-tile-011.jpg': 'kitchens',
+  'rmc-tile-012.jpg': 'custom',
+  'rmc-tile-013.jpg': 'showers',
+  'rmc-tile-014.jpg': 'showers',
+  'rmc-tile-015.jpg': 'custom',
+  'rmc-tile-016.jpg': 'custom',
+  'rmc-tile-017.jpg': 'custom',
+  'rmc-tile-018.jpg': 'custom',
+  'rmc-tile-019.jpg': 'custom',
+  'rmc-tile-020.jpg': 'baths',
+  'rmc-tile-021.jpg': 'showers',
+  'rmc-tile-022.jpg': 'showers',
+  'rmc-tile-023.jpg': 'kitchens',
+  'rmc-tile-024.jpg': 'showers',
+  'rmc-tile-025.jpg': 'custom',
+  'rmc-tile-026.jpg': 'baths',
+  'rmc-tile-027.jpg': 'floors',
+  'rmc-tile-028.jpg': 'showers',
+  'rmc-tile-029.jpg': 'baths',
+  'rmc-tile-030.jpg': 'showers',
+  'rmc-tile-031.jpg': 'baths',
+  'rmc-tile-032.jpg': 'showers',
+  'rmc-tile-033.jpg': 'kitchens',
+  'rmc-tile-034.jpg': 'kitchens',
+  'rmc-tile-035.jpg': 'kitchens',
+  'rmc-tile-036.jpg': 'floors',
+  'rmc-tile-037.jpg': 'floors',
+  'rmc-tile-038.jpg': 'baths',
+  'rmc-tile-039.jpg': 'custom',
+  'rmc-tile-040.jpg': 'floors',
+  'rmc-tile-041.jpg': 'floors',
+  'rmc-tile-042.jpg': 'floors',
+  'rmc-tile-043.jpg': 'floors',
+  'rmc-tile-044.jpg': 'floors',
+  'rmc-tile-045.jpg': 'floors',
+  'rmc-tile-046.jpg': 'floors',
+  'rmc-tile-047.jpg': 'floors',
+  'rmc-tile-048.jpg': 'floors',
+  'rmc-tile-049.jpg': 'floors',
+  'rmc-tile-050.jpg': 'floors',
+  'rmc-tile-051.jpg': 'floors',
+  'rmc-tile-052.jpg': 'floors',
+  'rmc-tile-053.jpg': 'floors',
+  'rmc-tile-054.jpg': 'floors',
+  'rmc-tile-055.jpg': 'baths',
+  'rmc-tile-056.jpg': 'floors',
+  'rmc-tile-057.jpg': 'baths',
+  'rmc-tile-058.jpg': 'baths',
+  'rmc-tile-059.jpg': 'showers',
+  'rmc-tile-060.jpg': 'floors',
+  'rmc-tile-061.jpg': 'floors',
+  'rmc-tile-062.jpg': 'floors',
+  'rmc-tile-063.jpg': 'floors',
+  'rmc-tile-064.jpg': 'custom',
+  'rmc-tile-065.jpg': 'kitchens',
+  'rmc-tile-066.jpg': 'showers',
+  'rmc-tile-067.jpg': 'custom',
+  'rmc-tile-068.jpg': 'custom',
+  'rmc-tile-069.jpg': 'custom',
+  'rmc-tile-070.jpg': 'custom',
+  'rmc-tile-071.jpg': 'custom',
+  'rmc-tile-072.jpg': 'showers',
+  'rmc-tile-073.jpg': 'showers',
+  'rmc-tile-074.jpg': 'showers',
+  'rmc-tile-075.jpg': 'baths',
+  'rmc-tile-076.jpg': 'showers',
+  'rmc-tile-077.jpg': 'baths',
+  'rmc-tile-078.jpg': 'custom',
+  'rmc-tile-079.jpg': 'showers',
+  'rmc-tile-080.jpg': 'showers',
+  'rmc-tile-081.jpg': 'showers',
+  'rmc-tile-082.jpg': 'showers',
+
+  // --- rmc-tile 083-164 ---
+  'rmc-tile-083.jpg': 'baths',
+  'rmc-tile-084.jpg': 'showers',
+  'rmc-tile-085.jpg': 'custom',
+  'rmc-tile-086.jpg': 'kitchens',
+  'rmc-tile-087.jpg': 'floors',
+  'rmc-tile-088.jpg': 'floors',
+  'rmc-tile-089.jpg': 'floors',
+  'rmc-tile-090.jpg': 'baths',
+  'rmc-tile-091.jpg': 'showers',
+  'rmc-tile-092.jpg': 'kitchens',
+  'rmc-tile-093.jpg': 'floors',
+  'rmc-tile-094.jpg': 'baths',
+  'rmc-tile-095.jpg': 'showers',
+  'rmc-tile-096.jpg': 'showers',
+  'rmc-tile-097.jpg': 'baths',
+  'rmc-tile-098.jpg': 'kitchens',
+  'rmc-tile-099.jpg': 'kitchens',
+  'rmc-tile-100.jpg': 'showers',
+  'rmc-tile-101.jpg': 'showers',
+  'rmc-tile-102.jpg': 'showers',
+  'rmc-tile-103.jpg': 'showers',
+  'rmc-tile-104.jpg': 'custom',
+  'rmc-tile-105.jpg': 'floors',
+  'rmc-tile-106.jpg': 'floors',
+  'rmc-tile-107.jpg': 'floors',
+  'rmc-tile-108.jpg': 'showers',
+  'rmc-tile-109.jpg': 'baths',
+  'rmc-tile-110.jpg': 'custom',
+  'rmc-tile-111.jpg': 'showers',
+  'rmc-tile-112.jpg': 'baths',
+  'rmc-tile-113.jpg': 'custom',
+  'rmc-tile-114.jpg': 'kitchens',
+  'rmc-tile-115.jpg': 'custom',
+  'rmc-tile-116.jpg': 'custom',
+  'rmc-tile-117.jpg': 'showers',
+  'rmc-tile-118.jpg': 'floors',
+  'rmc-tile-119.jpg': 'floors',
+  'rmc-tile-120.jpg': 'baths',
+  'rmc-tile-121.jpg': 'baths',
+  'rmc-tile-122.jpg': 'baths',
+  'rmc-tile-123.jpg': 'baths',
+  'rmc-tile-124.jpg': 'showers',
+  'rmc-tile-125.jpg': 'showers',
+  'rmc-tile-126.jpg': 'showers',
+  'rmc-tile-127.jpg': 'kitchens',
+  'rmc-tile-128.jpg': 'kitchens',
+  'rmc-tile-129.jpg': 'kitchens',
+  'rmc-tile-130.jpg': 'baths',
+  'rmc-tile-131.jpg': 'floors',
+  'rmc-tile-132.jpg': 'floors',
+  'rmc-tile-133.jpg': 'baths',
+  'rmc-tile-134.jpg': 'showers',
+  'rmc-tile-135.jpg': 'showers',
+  'rmc-tile-136.jpg': 'showers',
+  'rmc-tile-137.jpg': 'showers',
+  'rmc-tile-138.jpg': 'showers',
+  'rmc-tile-139.jpg': 'showers',
+  'rmc-tile-140.jpg': 'showers',
+  'rmc-tile-141.jpg': 'showers',
+  'rmc-tile-142.jpg': 'baths',
+  'rmc-tile-143.jpg': 'showers',
+  'rmc-tile-144.jpg': 'showers',
+  'rmc-tile-145.jpg': 'showers',
+  'rmc-tile-146.jpg': 'baths',
+  'rmc-tile-147.jpg': 'baths',
+  'rmc-tile-148.jpg': 'kitchens',
+  'rmc-tile-149.jpg': 'kitchens',
+  'rmc-tile-150.jpg': 'showers',
+  'rmc-tile-151.jpg': 'custom',
+  'rmc-tile-152.jpg': 'custom',
+  'rmc-tile-153.jpg': 'showers',
+  'rmc-tile-154.jpg': 'showers',
+  'rmc-tile-155.jpg': 'showers',
+  'rmc-tile-156.jpg': 'custom',
+  'rmc-tile-157.jpg': 'floors',
+  'rmc-tile-158.jpg': 'floors',
+  'rmc-tile-159.jpg': 'floors',
+  'rmc-tile-160.jpg': 'custom',
+  'rmc-tile-161.jpg': 'custom',
+  'rmc-tile-162.jpg': 'custom',
+  'rmc-tile-163.jpg': 'kitchens',
+  'rmc-tile-164.jpg': 'kitchens',
+
+  // --- rmc-tile 165-245 ---
+  'rmc-tile-165.jpg': 'baths',
+  'rmc-tile-166.jpg': 'baths',
+  'rmc-tile-167.jpg': 'baths',
+  'rmc-tile-168.jpg': 'showers',
+  'rmc-tile-169.jpg': 'showers',
+  'rmc-tile-170.jpg': 'baths',
+  'rmc-tile-171.jpg': 'baths',
+  'rmc-tile-172.jpg': 'floors',
+  'rmc-tile-173.jpg': 'showers',
+  'rmc-tile-174.jpg': 'kitchens',
+  'rmc-tile-175.jpg': 'floors',
+  'rmc-tile-176.jpg': 'kitchens',
+  'rmc-tile-177.jpg': 'showers',
+  'rmc-tile-178.jpg': 'showers',
+  'rmc-tile-179.jpg': 'showers',
+  'rmc-tile-180.jpg': 'showers',
+  'rmc-tile-181.jpg': 'showers',
+  'rmc-tile-182.jpg': 'baths',
+  'rmc-tile-183.jpg': 'showers',
+  'rmc-tile-184.jpg': 'baths',
+  'rmc-tile-185.jpg': 'showers',
+  'rmc-tile-186.jpg': 'showers',
+  'rmc-tile-187.jpg': 'showers',
+  'rmc-tile-188.jpg': 'showers',
+  'rmc-tile-189.jpg': 'showers',
+  'rmc-tile-190.jpg': 'showers',
+  'rmc-tile-191.jpg': 'showers',
+  'rmc-tile-192.jpg': 'showers',
+  'rmc-tile-193.jpg': 'custom',
+  'rmc-tile-194.jpg': 'floors',
+  'rmc-tile-195.jpg': 'kitchens',
+  'rmc-tile-196.jpg': 'kitchens',
+  'rmc-tile-197.jpg': 'custom',
+  'rmc-tile-198.jpg': 'custom',
+  'rmc-tile-199.jpg': 'floors',
+  'rmc-tile-200.jpg': 'custom',
+  'rmc-tile-201.jpg': 'custom',
+  'rmc-tile-202.jpg': 'custom',
+  'rmc-tile-203.jpg': 'custom',
+  'rmc-tile-204.jpg': 'custom',
+  'rmc-tile-205.jpg': 'kitchens',
+  'rmc-tile-206.jpg': 'kitchens',
+  'rmc-tile-207.jpg': 'kitchens',
+  'rmc-tile-208.jpg': 'kitchens',
+  'rmc-tile-209.jpg': 'kitchens',
+  'rmc-tile-210.jpg': 'kitchens',
+  'rmc-tile-211.jpg': 'kitchens',
+  'rmc-tile-212.jpg': 'showers',
+  'rmc-tile-213.jpg': 'showers',
+  'rmc-tile-214.jpg': 'showers',
+  'rmc-tile-215.jpg': 'showers',
+  'rmc-tile-216.jpg': 'showers',
+  'rmc-tile-217.jpg': 'showers',
+  'rmc-tile-218.jpg': 'kitchens',
+  'rmc-tile-219.jpg': 'kitchens',
+  'rmc-tile-220.jpg': 'kitchens',
+  'rmc-tile-221.jpg': 'kitchens',
+  'rmc-tile-222.jpg': 'kitchens',
+  'rmc-tile-223.jpg': 'kitchens',
+  'rmc-tile-224.jpg': 'showers',
+  'rmc-tile-225.jpg': 'showers',
+  'rmc-tile-226.jpg': 'floors',
+  'rmc-tile-227.jpg': 'showers',
+  'rmc-tile-228.jpg': 'showers',
+  'rmc-tile-229.jpg': 'showers',
+  'rmc-tile-230.jpg': 'baths',
+  'rmc-tile-231.jpg': 'kitchens',
+  'rmc-tile-232.jpg': 'custom',
+  'rmc-tile-233.jpg': 'custom',
+  'rmc-tile-234.jpg': 'showers',
+  'rmc-tile-235.jpg': 'showers',
+  'rmc-tile-236.jpg': 'showers',
+  'rmc-tile-237.jpg': 'baths',
+  'rmc-tile-238.jpg': 'showers',
+  'rmc-tile-239.jpg': 'custom',
+  'rmc-tile-240.jpg': 'custom',
+  'rmc-tile-241.jpg': 'custom',
+  'rmc-tile-242.jpg': 'custom',
+  'rmc-tile-243.jpg': 'custom',
+};
+
+// Files to exclude from the gallery entirely
+const excludeFiles = new Set(['tile-stack.png', 'rmc-tile-244.jpg', 'rmc-tile-245.jpg']);
+
+// Featured photos — curated best-of mix
+const featuredFiles = new Set([
   'cool-chevron.jpg', 'cool-floor.jpg', 'cool-herringbone.jpg', 'cool-plank.jpg',
   'cool-striated-shower.jpg', 'warm-tub.jpg', 'cool-kitchen.jpg', 'warm-fireplace.jpg',
   'warm-stone.jpg', 'cool-basketweave-shower.jpg', 'cool-bench-shower.jpg',
   'cool-largeformat.jpg', 'warm-subway.jpg', 'cool-blackaccent-shower.jpg',
-  'warm-green-powder.jpg', 'warm-green-laundry.jpg', 'warm-powder.jpg',
-  'warm-green-bath.jpg', 'tile-stack.png',
+  'warm-green-powder.jpg', 'warm-green-laundry.jpg', 'warm-powder.jpg', 'warm-green-bath.jpg',
+  'rmc-tile-009.jpg', 'rmc-tile-010.jpg', 'rmc-tile-014.jpg', 'rmc-tile-018.jpg',
+  'rmc-tile-021.jpg', 'rmc-tile-023.jpg', 'rmc-tile-024.jpg', 'rmc-tile-030.jpg',
+  'rmc-tile-038.jpg', 'rmc-tile-090.jpg', 'rmc-tile-094.jpg', 'rmc-tile-100.jpg',
+  'rmc-tile-127.jpg', 'rmc-tile-130.jpg', 'rmc-tile-195.jpg', 'rmc-tile-205.jpg',
+  'IMG_9111.jpeg',
 ]);
 
-// Get remaining photos (not curated, not tile-stack)
-const remainingPhotos = Object.entries(allPhotos)
+// Build gallery data from glob
+const galleryPhotos = Object.entries(allPhotos)
   .filter(([path]) => {
     const fileName = path.split('/').pop() || '';
-    return !curatedFileNames.has(fileName);
+    return !excludeFiles.has(fileName);
   })
-  .map(([path, mod]) => ({
-    src: mod.default,
-    alt: 'RMC Tile project',
-    cap: 'Northern Colorado',
-    cat: 'all' as string,
-  }));
+  .map(([path, mod]) => {
+    const fileName = path.split('/').pop() || '';
+    const cat = categoryMap[fileName] || 'custom';
+    const featured = featuredFiles.has(fileName);
+    return { src: mod.default, cat, featured, fileName };
+  });
 
-// Combine: curated first, then remaining
-const allGalleryPhotos = [...curatedPhotos, ...remainingPhotos];
+// Sort: featured first, then by filename
+const featuredPhotos = galleryPhotos.filter((p) => p.featured);
+const nonFeatured = galleryPhotos.filter((p) => !p.featured);
+const allGalleryPhotos = [...featuredPhotos, ...nonFeatured];
 
-const filters = ['all', 'kitchens', 'baths', 'showers', 'floors', 'custom'];
+const filters = ['featured', 'showers', 'kitchens', 'baths', 'floors', 'custom'];
 const filterLabels: Record<string, string> = {
-  all: 'All Work', kitchens: 'Kitchens', baths: 'Baths',
-  showers: 'Showers', floors: 'Floors', custom: 'Custom',
+  featured: 'Featured', showers: 'Showers', kitchens: 'Kitchens',
+  baths: 'Baths', floors: 'Floors', custom: 'Custom',
 };
 ---
 
@@ -83,22 +583,22 @@ const filterLabels: Record<string, string> = {
   <div class="container">
     <div class="filters" id="filters">
       {filters.map((f) => (
-        <button class:list={[{ active: f === 'all' }]} data-filter={f}>{filterLabels[f]}</button>
+        <button class:list={[{ active: f === 'featured' }]} data-filter={f}>{filterLabels[f]}</button>
       ))}
     </div>
 
     <div class="gallery" id="gallery">
       {allGalleryPhotos.map((p) => (
-        <figure data-cat={p.cat}>
+        <figure data-cat={p.cat} data-featured={p.featured ? 'true' : 'false'} class={p.featured ? '' : 'hide'}>
           <img
             src={p.src.src}
             width={p.src.width}
             height={p.src.height}
-            alt={p.alt}
+            alt={`RMC Tile ${p.cat} project`}
             loading="lazy"
             decoding="async"
           />
-          <figcaption>{p.cap}</figcaption>
+          <figcaption>{p.cat.charAt(0).toUpperCase() + p.cat.slice(1)}</figcaption>
         </figure>
       ))}
     </div>
@@ -114,7 +614,6 @@ const filterLabels: Record<string, string> = {
 </div>
 
 <script>
-  // Gallery filter
   const btns = document.querySelectorAll('#filters button');
   const figs = Array.from(document.querySelectorAll('#gallery figure'));
 
@@ -124,8 +623,12 @@ const filterLabels: Record<string, string> = {
       b.classList.add('active');
       const f = (b as HTMLElement).dataset.filter;
       figs.forEach((fig) => {
-        const cat = (fig as HTMLElement).dataset.cat;
-        fig.classList.toggle('hide', f !== 'all' && cat !== f);
+        const el = fig as HTMLElement;
+        if (f === 'featured') {
+          fig.classList.toggle('hide', el.dataset.featured !== 'true');
+        } else {
+          fig.classList.toggle('hide', el.dataset.cat !== f);
+        }
       });
     });
   });
