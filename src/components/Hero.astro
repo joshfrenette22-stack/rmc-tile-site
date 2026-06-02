@@ -13,8 +13,8 @@
       </form>
     </div>
     <div class="hero-art">
-      <div class="video-wrap" id="heroVideoWrap">
-        <video id="heroVideo" autoplay muted playsinline preload="auto" width="800" height="450">
+      <div class="video-wrap">
+        <video id="heroVideo" autoplay muted playsinline preload="auto">
           <source src="/hero-animation.mp4" type="video/mp4" />
         </video>
         <div class="gradient-fade gradient-top"></div>
@@ -28,26 +28,13 @@
 
 <script>
   const video = document.getElementById('heroVideo') as HTMLVideoElement;
-  const duration = 5.04; // video length in seconds
-  const rangeStart = 3.8;  // scrub back to here
-  const rangeEnd = duration; // scrub forward to here
-  const cycleDuration = 4000; // ms for one back-and-forth cycle
-
+  // After the open animation plays once, switch to the looping version
+  // which ping-pongs the last ~1.2s so tiles look like they're moving
   video.addEventListener('ended', () => {
-    video.pause();
-    // Oscillate the playhead back and forth near the end
-    // so individual tiles appear to shift in place
-    const start = performance.now();
-    function tick(now: number) {
-      const elapsed = (now - start) % cycleDuration;
-      const t = elapsed / cycleDuration;
-      // Sine wave: 0→1→0 over one cycle
-      const ease = (Math.sin(t * Math.PI * 2 - Math.PI / 2) + 1) / 2;
-      video.currentTime = rangeStart + ease * (rangeEnd - rangeStart);
-      requestAnimationFrame(tick);
-    }
-    requestAnimationFrame(tick);
-  });
+    video.src = '/hero-animation-loop.mp4';
+    video.loop = true;
+    video.play();
+  }, { once: true });
 </script>
 
 <style>
@@ -65,12 +52,12 @@
     position: relative;
     z-index: 2;
     width: 100%;
-    max-width: 1280px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0 48px;
     display: grid;
-    grid-template-columns: 1.02fr 0.98fr;
-    gap: 48px;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 32px;
     align-items: center;
   }
   h1 {
@@ -94,16 +81,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: clamp(320px, 50vw, 680px);
+    min-height: clamp(360px, 54vw, 720px);
   }
 
-  /* Video — scaled up */
+  /* Video — large and immersive */
   .video-wrap {
     position: relative;
-    width: 130%;
-    max-width: 920px;
-    transform: scale(1);
-    transition: transform 0.6s ease;
+    width: 150%;
+    max-width: 1100px;
+    margin-right: -20%;
   }
   .video-wrap video {
     display: block;
@@ -119,22 +105,22 @@
   }
   .gradient-top {
     top: 0; left: 0; right: 0;
-    height: 28%;
+    height: 25%;
     background: linear-gradient(to bottom, #fff 0%, transparent 100%);
   }
   .gradient-bottom {
     bottom: 0; left: 0; right: 0;
-    height: 28%;
+    height: 25%;
     background: linear-gradient(to top, #fff 0%, transparent 100%);
   }
   .gradient-left {
     top: 0; bottom: 0; left: 0;
-    width: 22%;
+    width: 20%;
     background: linear-gradient(to right, #fff 0%, transparent 100%);
   }
   .gradient-right {
     top: 0; bottom: 0; right: 0;
-    width: 22%;
+    width: 20%;
     background: linear-gradient(to left, #fff 0%, transparent 100%);
   }
 
@@ -187,6 +173,6 @@
     .hero-grid { grid-template-columns: 1fr; gap: 4px; padding-top: 20px; }
     .hero-copy { order: 1; }
     .hero-art { order: 2; min-height: 0; }
-    .video-wrap { width: 100%; max-width: 90%; }
+    .video-wrap { width: 100%; max-width: 100%; margin-right: 0; }
   }
 </style>
