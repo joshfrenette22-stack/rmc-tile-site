@@ -1,6 +1,4 @@
 ---
-import { Image } from 'astro:assets';
-import tileStack from '../assets/photos/tile-stack.png';
 ---
 
 <header class="hero" id="top">
@@ -15,7 +13,15 @@ import tileStack from '../assets/photos/tile-stack.png';
       </form>
     </div>
     <div class="hero-art">
-      <Image src={tileStack} alt="Stack of RMC tile samples - marble, terracotta, patterned, and gloss" width={700} loading="eager" />
+      <div class="video-wrap">
+        <video autoplay muted playsinline loop preload="auto" width="800" height="450">
+          <source src="/hero-animation.mp4" type="video/mp4" />
+        </video>
+        <div class="gradient-fade gradient-top"></div>
+        <div class="gradient-fade gradient-bottom"></div>
+        <div class="gradient-fade gradient-left"></div>
+        <div class="gradient-fade gradient-right"></div>
+      </div>
     </div>
   </div>
 </header>
@@ -66,14 +72,44 @@ import tileStack from '../assets/photos/tile-stack.png';
     justify-content: center;
     min-height: clamp(320px, 46vw, 620px);
   }
-  .hero-art :global(img) {
+
+  /* Video with immersive gradient blend */
+  .video-wrap {
     position: relative;
-    z-index: 1;
     width: 100%;
     max-width: 700px;
+  }
+  .video-wrap video {
+    display: block;
+    width: 100%;
     height: auto;
-    object-fit: contain;
-    mix-blend-mode: multiply;
+  }
+
+  /* Gradient overlays to blend video into hero background */
+  .gradient-fade {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .gradient-top {
+    top: 0; left: 0; right: 0;
+    height: 30%;
+    background: linear-gradient(to bottom, #fff 0%, transparent 100%);
+  }
+  .gradient-bottom {
+    bottom: 0; left: 0; right: 0;
+    height: 30%;
+    background: linear-gradient(to top, #fff 0%, transparent 100%);
+  }
+  .gradient-left {
+    top: 0; bottom: 0; left: 0;
+    width: 25%;
+    background: linear-gradient(to right, #fff 0%, transparent 100%);
+  }
+  .gradient-right {
+    top: 0; bottom: 0; right: 0;
+    width: 25%;
+    background: linear-gradient(to left, #fff 0%, transparent 100%);
   }
 
   /* Address pill */
@@ -125,6 +161,6 @@ import tileStack from '../assets/photos/tile-stack.png';
     .hero-grid { grid-template-columns: 1fr; gap: 4px; padding-top: 20px; }
     .hero-copy { order: 1; }
     .hero-art { order: 2; min-height: 0; }
-    .hero-art :global(img) { max-width: 90%; }
+    .video-wrap { max-width: 90%; }
   }
 </style>
