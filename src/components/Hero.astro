@@ -14,8 +14,8 @@
     </div>
     <div class="hero-art">
       <div class="video-wrap">
-        <video id="heroVideo" autoplay muted playsinline preload="auto">
-          <source src="/hero-animation.mp4" type="video/mp4" />
+        <video autoplay muted playsinline preload="auto">
+          <source src="/hero-animation-full.mp4" type="video/mp4" />
         </video>
         <div class="gradient-fade gradient-top"></div>
         <div class="gradient-fade gradient-bottom"></div>
@@ -26,16 +26,6 @@
   </div>
 </header>
 
-<script>
-  const video = document.getElementById('heroVideo') as HTMLVideoElement;
-  // After the open animation plays once, switch to the looping version
-  // which ping-pongs the last ~1.2s so tiles look like they're moving
-  video.addEventListener('ended', () => {
-    video.src = '/hero-animation-loop.mp4';
-    video.loop = true;
-    video.play();
-  }, { once: true });
-</script>
 
 <style>
   .hero {
