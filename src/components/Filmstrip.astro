@@ -122,5 +122,12 @@ const row2 = [
     text-transform: uppercase;
     color: var(--color-beige);
   }
-  @media (max-width: 860px) { .film-card { width: 74vw; } }
+  @media (max-width: 860px) {
+    .film-card { width: 74vw; }
+    .work-in { padding: 0 20px; }
+  }
+  @media (max-width: 480px) {
+    .work-in { padding: 0 16px; }
+    .film-card { width: 85vw; }
+  }
 </style>

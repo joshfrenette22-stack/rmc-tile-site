@@ -661,6 +661,16 @@ const filterLabels: Record<string, string> = {
     if (e.key === 'ArrowLeft') stepLb(-1);
     if (e.key === 'ArrowRight') stepLb(1);
   });
+
+  // Touch swipe support for lightbox
+  let touchStartX = 0;
+  lb.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].clientX;
+  }, { passive: true });
+  lb.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 40) stepLb(dx < 0 ? 1 : -1);
+  }, { passive: true });
 </script>
 
 <style>
@@ -676,6 +686,7 @@ const filterLabels: Record<string, string> = {
     border: 1px solid var(--color-canvas-line);
     border-radius: 999px;
     padding: 10px 18px;
+    min-height: 44px;
     cursor: pointer;
     transition: all 0.18s;
   }
@@ -782,5 +793,9 @@ const filterLabels: Record<string, string> = {
   .nav-arrow:hover { background: rgba(255,247,233,0.12); }
   .prev { left: 3vw; }
   .next { right: 3vw; }
-  @media (max-width: 560px) { .nav-arrow { display: none; } }
+  @media (max-width: 560px) {
+    .nav-arrow { width: 40px; height: 40px; font-size: 20px; }
+    .prev { left: 8px; }
+    .next { right: 8px; }
+  }
 </style>

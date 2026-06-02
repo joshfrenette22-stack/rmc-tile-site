@@ -34,7 +34,36 @@ const links = [
   </ul>
 
   <a href="/contact" class="nav-cta">Free estimate</a>
+
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 </nav>
+
+<!-- Mobile drawer overlay -->
+<div class="mobile-drawer" id="mobile-drawer" aria-hidden="true">
+  <div class="mobile-drawer-inner">
+    <button class="mobile-drawer-close" id="mobile-drawer-close" aria-label="Close menu">
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="mobile-nav-links">
+      {links.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class:list={['mobile-nav-link', { active: currentPath === link.href }]}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+    <a href="/contact" class="mobile-nav-cta">Free estimate</a>
+  </div>
+</div>
 
 <style>
   .nav-pill {
@@ -118,19 +147,170 @@ const links = [
     opacity: 0.88;
   }
 
-  /* Responsive: hide links below 860px */
+  /* CTA button min touch target */
+  .nav-cta {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Hamburger button — hidden on desktop */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .nav-hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #111;
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  /* Mobile drawer */
+  .mobile-drawer {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    background: var(--color-ink, #111);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .mobile-drawer.is-open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .mobile-drawer-inner {
+    display: flex;
+    flex-direction: column;
+    padding: 24px 24px 48px;
+    height: 100%;
+    overflow-y: auto;
+  }
+
+  .mobile-drawer-close {
+    align-self: flex-end;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    margin-bottom: 16px;
+  }
+
+  .mobile-drawer-close span {
+    display: block;
+    position: absolute;
+    width: 22px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    top: 50%;
+    left: 50%;
+  }
+
+  .mobile-drawer-close span:first-child {
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  .mobile-drawer-close span:last-child {
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+
+  .mobile-nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    padding: 16px 24px;
+    min-height: 44px;
+    font-family: var(--font-body);
+    font-size: 20px;
+    font-weight: 500;
+    color: #fff;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: opacity 0.2s ease;
+  }
+
+  .mobile-nav-link:hover,
+  .mobile-nav-link.active {
+    opacity: 0.6;
+  }
+
+  .mobile-nav-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 32px;
+    min-height: 52px;
+    padding: 14px 28px;
+    background: #F66F00;
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    align-self: flex-start;
+  }
+
+  .mobile-nav-cta:hover {
+    opacity: 0.88;
+  }
+
+  /* Responsive: hide links below 860px, show hamburger */
   @media (max-width: 859px) {
+    .nav-pill {
+      gap: 12px;
+      max-width: calc(100vw - 32px);
+    }
+
     .nav-links {
       display: none;
     }
 
-    .nav-pill {
-      gap: 16px;
+    .nav-cta {
+      display: none;
+    }
+
+    .nav-hamburger {
+      display: flex;
+    }
+
+    .mobile-drawer {
+      display: block;
     }
   }
 </style>
 
 <script>
+  // ── Scroll-hide nav ──────────────────────────────────────────────
   const nav = document.getElementById('main-nav');
   let lastScrollY = window.scrollY;
   let ticking = false;
@@ -139,10 +319,8 @@ const links = [
     const currentScrollY = window.scrollY;
 
     if (currentScrollY > lastScrollY && currentScrollY > 60) {
-      // Scrolling down
       nav?.classList.add('nav-hidden');
     } else {
-      // Scrolling up
       nav?.classList.remove('nav-hidden');
     }
 
@@ -154,6 +332,44 @@ const links = [
     if (!ticking) {
       window.requestAnimationFrame(onScroll);
       ticking = true;
+    }
+  });
+
+  // ── Mobile drawer ────────────────────────────────────────────────
+  const hamburger = document.getElementById('nav-hamburger');
+  const drawer = document.getElementById('mobile-drawer');
+  const drawerClose = document.getElementById('mobile-drawer-close');
+  const drawerLinks = drawer?.querySelectorAll('.mobile-nav-link, .mobile-nav-cta');
+
+  function openDrawer() {
+    drawer?.classList.add('is-open');
+    drawer?.removeAttribute('aria-hidden');
+    hamburger?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeDrawer() {
+    drawer?.classList.remove('is-open');
+    drawer?.setAttribute('aria-hidden', 'true');
+    hamburger?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburger?.addEventListener('click', () => {
+    const isOpen = drawer?.classList.contains('is-open');
+    isOpen ? closeDrawer() : openDrawer();
+  });
+
+  drawerClose?.addEventListener('click', closeDrawer);
+
+  drawerLinks?.forEach((link) => {
+    link.addEventListener('click', closeDrawer);
+  });
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && drawer?.classList.contains('is-open')) {
+      closeDrawer();
     }
   });
 </script>

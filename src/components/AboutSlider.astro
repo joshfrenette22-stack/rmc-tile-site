@@ -149,13 +149,16 @@ const slides = [
     gap: 8px;
   }
   .dots :global(button) {
-    width: 8px; height: 8px; padding: 0;
+    width: 8px; height: 8px; padding: 10px;
+    box-sizing: content-box;
     border: none; border-radius: 50%;
     background: rgba(255,255,255,0.55);
+    background-clip: content-box;
     cursor: pointer; transition: all 0.25s;
   }
   .dots :global(button.on) {
     background: #fff;
+    background-clip: content-box;
     width: 22px;
     border-radius: 4px;
   }
@@ -183,8 +186,12 @@ const slides = [
     margin-top: 4px;
   }
   @media (max-width: 860px) {
-    .about-in { grid-template-columns: 1fr; gap: 40px; }
+    .about-in { grid-template-columns: 1fr; gap: 40px; padding: 0 20px; }
     .frame-img { aspect-ratio: 4/3; }
     .tagchip { left: 16px; }
+    .stats { gap: 20px; }
+  }
+  @media (max-width: 480px) {
+    .about-in { padding: 0 16px; }
   }
 </style>

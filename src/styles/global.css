@@ -145,3 +145,7 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 860px) {
   .container, .section-pad .container { padding: 0 28px; }
 }
+@media (max-width: 480px) {
+  .container, .section-pad .container { padding: 0 16px; }
+  .section-pad { padding: 56px 0; }
+}

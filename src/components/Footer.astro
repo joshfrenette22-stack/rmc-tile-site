@@ -167,6 +167,8 @@ const links = [
     color: rgba(255, 247, 233, 0.65);
     text-decoration: none;
     transition: color 0.2s ease;
+    padding: 8px 0;
+    display: inline-block;
   }
 
   .footer-link:hover {
@@ -191,6 +193,8 @@ const links = [
 
   /* Responsive */
   @media (max-width: 768px) {
+    .footer-inner { padding: 0 20px; }
+
     .footer-top {
       grid-template-columns: 1fr;
       gap: 36px;
@@ -200,5 +204,8 @@ const links = [
       flex-direction: column;
       gap: 4px;
     }
+  }
+  @media (max-width: 480px) {
+    .footer-inner { padding: 0 16px; }
   }
 </style>
