@@ -22,9 +22,9 @@ const { bannerImage, bannerAlt, breadcrumb, eyebrow, title, description } = Astr
   <div class="subhead">
     <div class="subhead-in">
       <nav class="breadcrumb" aria-label="Breadcrumb">Home / {breadcrumb}</nav>
-      <span class="eyebrow">{eyebrow}</span>
-      <h1>{title}</h1>
-      <p>{description}</p>
+      <span class="eyebrow sh-anim" style="--i:0">{eyebrow}</span>
+      <h1 class="sh-anim" style="--i:1">{title}</h1>
+      <p class="sh-anim" style="--i:2">{description}</p>
     </div>
   </div>
 </header>
@@ -103,5 +103,26 @@ const { bannerImage, bannerAlt, breadcrumb, eyebrow, title, description } = Astr
     .subhead-in {
       padding: 36px 28px;
     }
+  }
+
+  /* Page-load entrance animations */
+  @keyframes sh-rise {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes sh-img {
+    from { opacity: 0; transform: scale(1.04); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  .banner :global(img) {
+    animation: sh-img 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .sh-anim {
+    animation: sh-rise 0.75s cubic-bezier(0.22, 1, 0.36, 1) calc(0.1s + var(--i, 0) * 0.13s) both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .banner :global(img), .sh-anim { animation: none; }
   }
 </style>

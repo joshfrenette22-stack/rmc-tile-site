@@ -563,13 +563,13 @@ const filterLabels: Record<string, string> = {
 
 <section class="section-pad" style="background:var(--color-canvas);">
   <div class="container">
-    <div class="filters" id="filters">
+    <div class="filters" id="filters" data-reveal="up">
       {filters.map((f) => (
         <button class:list={[{ active: f === 'featured' }]} data-filter={f}>{filterLabels[f]}</button>
       ))}
     </div>
 
-    <div class="gallery" id="gallery">
+    <div class="gallery" id="gallery" data-reveal="up" style="--delay:150ms">
       {allGalleryPhotos.map((p) => (
         <figure data-cat={p.cat} data-featured={p.featured ? 'true' : 'false'} class={p.featured ? '' : 'hide'}>
           <img

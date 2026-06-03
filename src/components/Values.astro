@@ -16,11 +16,11 @@ const { eyebrow, heading, values } = Astro.props;
 
 <section class="section-pad" style="background:var(--color-canvas);">
   <div class="container">
-    <div class="sec-eyebrow">{eyebrow}</div>
-    <h2 class="sec-h2">{heading}</h2>
+    <div class="sec-eyebrow" data-reveal="up">{eyebrow}</div>
+    <h2 class="sec-h2" data-reveal="up" style="--delay:100ms">{heading}</h2>
     <div class="values">
-      {values.map((v) => (
-        <div class="value">
+      {values.map((v, i) => (
+        <div class="value" data-reveal="scale" style={`--delay:${i * 100}ms`}>
           <div class="vn">{v.label}</div>
           <h3>{v.title}</h3>
           <p>{v.description}</p>
