@@ -1,0 +1,198 @@
+---
+const faqs = [
+  {
+    q: "How do I get a free estimate?",
+    a: "Fill out the address form on the home page or head to the Contact page and send a quick message. We'll reach back out within one business day to set up a walkthrough and get you a written quote.",
+  },
+  {
+    q: "What areas do you serve?",
+    a: "We're based in Loveland and work throughout Northern Colorado — Fort Collins, Greeley, Windsor, Berthoud, Longmont, and surrounding communities. Not sure if you're in range? Just ask.",
+  },
+  {
+    q: "What kinds of tile projects do you take on?",
+    a: "Showers (including shower pans and curbs), kitchen and bath floors, backsplashes, tub surrounds, laundry rooms, and custom accent work. We handle both new construction and remodels of all sizes.",
+  },
+  {
+    q: "Do you supply the tile, or do I buy it myself?",
+    a: "Either works. Most clients choose their own tile and we handle everything else — substrate, waterproofing, setting, grouting, and caulking. We can also point you toward suppliers if you want a recommendation.",
+  },
+  {
+    q: "How long does a typical project take?",
+    a: "A standard shower usually takes 3–5 days. A full bathroom floor and shower together runs closer to a week. Larger or more complex jobs are scoped individually. We give you a realistic timeline up front — no surprises.",
+  },
+  {
+    q: "Are you licensed and insured?",
+    a: "Yes. RMC Tile Construction LLC is a licensed contractor in Colorado and carries full general liability insurance. We're happy to provide proof of insurance before any work begins.",
+  },
+  {
+    q: "How far out are you currently booking?",
+    a: "Lead times vary by season. Spring and summer tend to book out 3–5 weeks; fall and winter are often tighter. Get in touch early if you have a hard move-in date or project deadline.",
+  },
+  {
+    q: "Who actually does the work — you or subcontractors?",
+    a: "Rob does every job himself. No subs, no handoffs. The person you talk to during the quote is the same person setting your tile. That's how we keep quality consistent and communication simple.",
+  },
+];
+---
+
+<section class="faq" id="faq">
+  <div class="faq-inner">
+    <div class="faq-head reveal">
+      <div class="eyebrow">FAQ</div>
+      <h2>Common Questions</h2>
+      <p class="faq-sub">Everything you want to know before reaching out.</p>
+    </div>
+
+    <div class="faq-list">
+      {faqs.map((item, i) => (
+        <div class="faq-item reveal" data-faq={i}>
+          <button class="faq-q" aria-expanded="false" aria-controls={`faq-ans-${i}`}>
+            <span>{item.q}</span>
+            <span class="faq-icon" aria-hidden="true"></span>
+          </button>
+          <div class="faq-a" id={`faq-ans-${i}`} role="region" hidden>
+            <p>{item.a}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.faq-q').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      const answer = document.getElementById(btn.getAttribute('aria-controls')!);
+
+      // Close all others
+      document.querySelectorAll<HTMLButtonElement>('.faq-q').forEach((other) => {
+        if (other !== btn) {
+          other.setAttribute('aria-expanded', 'false');
+          other.closest('.faq-item')?.classList.remove('is-open');
+          const otherAns = document.getElementById(other.getAttribute('aria-controls')!);
+          if (otherAns) otherAns.hidden = true;
+        }
+      });
+
+      btn.setAttribute('aria-expanded', String(!expanded));
+      btn.closest('.faq-item')?.classList.toggle('is-open', !expanded);
+      if (answer) answer.hidden = expanded;
+    });
+  });
+</script>
+
+<style>
+  .faq {
+    background: #fff;
+    padding: clamp(80px, 10vw, 140px) 0;
+    border-top: 1px solid var(--color-canvas-line);
+  }
+  .faq-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 48px;
+  }
+  .faq-head {
+    margin-bottom: 56px;
+  }
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-orange);
+    margin-bottom: 16px;
+  }
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.04;
+    font-size: clamp(32px, 4vw, 56px);
+    color: var(--color-ink);
+  }
+  .faq-sub {
+    margin-top: 16px;
+    font-size: 18px;
+    color: var(--color-body);
+    font-weight: 500;
+  }
+
+  /* Items */
+  .faq-item {
+    border-top: 1px solid var(--color-canvas-line);
+  }
+  .faq-item:last-child {
+    border-bottom: 1px solid var(--color-canvas-line);
+  }
+  .faq-q {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 24px 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-body);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--color-ink);
+    line-height: 1.4;
+  }
+  .faq-q:hover { color: var(--color-orange); }
+
+  /* +/− icon */
+  .faq-icon {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid var(--color-canvas-line);
+    position: relative;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .faq-icon::before,
+  .faq-icon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    background: var(--color-ink);
+    border-radius: 2px;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  .faq-icon::before { width: 10px; height: 1.5px; transform: translate(-50%, -50%); }
+  .faq-icon::after  { width: 1.5px; height: 10px; transform: translate(-50%, -50%); }
+
+  .faq-item.is-open .faq-icon {
+    background: var(--color-orange);
+    border-color: var(--color-orange);
+  }
+  .faq-item.is-open .faq-icon::before,
+  .faq-item.is-open .faq-icon::after { background: #fff; }
+  .faq-item.is-open .faq-icon::after  { transform: translate(-50%, -50%) rotate(90deg); opacity: 0; }
+
+  .faq-a {
+    padding-bottom: 24px;
+  }
+  .faq-a p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--color-body);
+    max-width: 68ch;
+  }
+
+  @media (max-width: 860px) {
+    .faq-inner { padding: 0 24px; }
+  }
+  @media (max-width: 480px) {
+    .faq-inner { padding: 0 20px; }
+    .faq-q { font-size: 16px; padding: 20px 0; }
+    .faq-head { margin-bottom: 40px; }
+  }
+</style>
