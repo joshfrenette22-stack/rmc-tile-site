@@ -15,12 +15,12 @@ const stats = [
     <Image src={coolLargeformat} alt="Large-format tile shower" width={1920} loading="lazy" class="grade" />
   </div>
   <div class="why-in">
-    <div class="why-lead reveal">
+    <div class="why-lead" data-reveal="left">
       <div class="eyebrow" style="color:var(--color-orange);margin-bottom:24px;">Why RMC</div>
       <h2>Most Tile Problems Start Before the First Tile Goes Down</h2>
       <p>So we sweat the part you can't see&mdash;the layout, the waterproofing, the prep. One setter owns the whole job, start to finish, and stands behind it.</p>
     </div>
-    <div class="why-stats reveal">
+    <div class="why-stats" data-reveal="right" style="--delay:120ms">
       {stats.map((st) => (
         <div class="why-stat">
           <span class="v">{st.v}</span>

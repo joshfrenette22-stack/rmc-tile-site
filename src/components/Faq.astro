@@ -37,7 +37,7 @@ const faqs = [
 
 <section class="faq" id="faq">
   <div class="faq-inner">
-    <div class="faq-head reveal">
+    <div class="faq-head" data-reveal="up">
       <div class="eyebrow">FAQ</div>
       <h2>Common Questions</h2>
       <p class="faq-sub">Everything you want to know before reaching out.</p>
@@ -45,7 +45,7 @@ const faqs = [
 
     <div class="faq-list">
       {faqs.map((item, i) => (
-        <div class="faq-item reveal" data-faq={i}>
+        <div class="faq-item reveal" data-faq={i} style={`--delay:${i * 55}ms`}>
           <button class="faq-q" aria-expanded="false" aria-controls={`faq-ans-${i}`}>
             <span>{item.q}</span>
             <span class="faq-icon" aria-hidden="true"></span>

@@ -17,7 +17,7 @@ const slides = [
 
 <section class="about" id="about-intro">
   <div class="about-in">
-    <div class="about-copy">
+    <div class="about-copy" data-reveal="left">
       <div class="eyebrow" style="color:var(--color-orange);margin-bottom:22px;">About RMC Tile</div>
       <h2>Two Generations of Setting Tile the Right Way</h2>
       <div class="body">
@@ -30,7 +30,7 @@ const slides = [
         <div class="stat"><div class="n">2019</div><div class="l">Serving Northern CO</div></div>
       </div>
     </div>
-    <div class="about-media">
+    <div class="about-media" data-reveal="right" style="--delay:150ms">
       <div class="frame-img" id="aboutSlider">
         {slides.map((s, i) => (
           <Image src={s.src} alt={s.alt} width={640} class:list={['grade', { active: i === 0 }]} loading="lazy" />

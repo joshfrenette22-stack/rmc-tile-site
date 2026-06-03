@@ -20,13 +20,13 @@ const steps = [
 
 <section class="process" id="how">
   <div class="process-in">
-    <div class="process-head">
+    <div class="process-head" data-reveal="up">
       <div class="eyebrow" style="color:var(--color-orange);margin-bottom:18px;">How It Works</div>
       <h2>Three Steps, One Setter</h2>
     </div>
     <div class="proc-grid">
-      {steps.map((s) => (
-        <div class="proc-step reveal">
+      {steps.map((s, i) => (
+        <div class="proc-step reveal" style={`--delay:${i * 150}ms`}>
           <span class="dot"></span>
           <div class="n">{s.num}</div>
           <h3>{s.title}</h3>

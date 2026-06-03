@@ -50,17 +50,21 @@ const { title, description = 'RMC Tile — Premium tile installation across the 
           (entries) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
-                entry.target.classList.add('in');
-                observer.unobserve(entry.target);
+                const el = entry.target as HTMLElement;
+                // Stagger delay can be set via inline style --delay or data-delay attribute
+                const dataDelay = el.dataset.delay;
+                if (dataDelay) el.style.setProperty('--delay', dataDelay + 'ms');
+                el.classList.add('in');
+                observer.unobserve(el);
               }
             });
           },
-          { threshold: 0.2 }
+          { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
         );
 
-        document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+        document.querySelectorAll('.reveal, [data-reveal]').forEach((el) => observer.observe(el));
       } else {
-        document.querySelectorAll('.reveal').forEach((el) => el.classList.add('in'));
+        document.querySelectorAll('.reveal, [data-reveal]').forEach((el) => el.classList.add('in'));
       }
     </script>
   </body>

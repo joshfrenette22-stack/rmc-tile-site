@@ -25,7 +25,7 @@ const row2 = [
 
 <section class="work" id="work">
   <div class="work-in">
-    <div class="work-head">
+    <div class="work-head" data-reveal="up">
       <div>
         <div class="eyebrow" style="color:var(--color-orange);margin-bottom:18px;">Our Work</div>
         <h2>Recently Set in Northern Colorado</h2>
@@ -33,7 +33,7 @@ const row2 = [
       <p>A few of the kitchens and baths we've finished&mdash;hover to slow it down.</p>
     </div>
   </div>
-  <div class="film">
+  <div class="film" data-reveal="fade" style="--delay:200ms">
     <div class="film-row">
       {[...row1, ...row1].map((p, i) => (
         <figure class="film-card">

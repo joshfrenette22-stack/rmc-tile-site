@@ -29,7 +29,7 @@ const services = [
 
 <section class="services" id="services">
   <div class="services-in">
-    <div class="services-head">
+    <div class="services-head" data-reveal="up">
       <div>
         <div class="eyebrow" style="color:var(--color-orange);margin-bottom:18px;">{eyebrow}</div>
         <h2>{heading}</h2>
@@ -37,8 +37,10 @@ const services = [
       <p>{description}</p>
     </div>
     <div class="svc-grid">
-      {services.map((s) => (
-        <ServiceCard {...s} />
+      {services.map((s, i) => (
+        <div class:list={['svc-wrap', { tall: s.tall }]} data-reveal="scale" style={`--delay:${i * 90}ms`}>
+          <ServiceCard {...s} />
+        </div>
       ))}
     </div>
   </div>
@@ -75,8 +77,12 @@ const services = [
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
   }
+  .svc-wrap { display: flex; flex-direction: column; }
+  .svc-wrap :global(.svc) { flex: 1; }
+  .svc-wrap.tall { grid-row: span 2; }
   @media (max-width: 860px) {
     .svc-grid { grid-template-columns: 1fr; }
+    .svc-wrap.tall { grid-row: auto; }
     .services-in { padding: 0 20px; }
   }
   @media (max-width: 480px) {
