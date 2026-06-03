@@ -287,8 +287,15 @@ const links = [
   /* Responsive: hide links below 860px, show hamburger */
   @media (max-width: 859px) {
     .nav-pill {
-      gap: 12px;
-      max-width: calc(100vw - 32px);
+      gap: 0;
+      width: calc(100vw - 24px);
+      max-width: 480px;
+      justify-content: space-between;
+      padding: 12px 12px 12px 20px;
+    }
+
+    .nav-logo-img {
+      height: 28px;
     }
 
     .nav-links {
@@ -301,6 +308,13 @@ const links = [
 
     .nav-hamburger {
       display: flex;
+      width: 52px;
+      height: 52px;
+    }
+
+    .nav-hamburger span {
+      width: 26px;
+      height: 2.5px;
     }
 
     .mobile-drawer {
